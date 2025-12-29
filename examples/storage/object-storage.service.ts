@@ -14,7 +14,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectPort } from '../../src'
 import type { ObjectMetadata, ObjectStoragePort } from './object-storage.port'
-import { OBJECT_STORAGE_PROVIDER } from './object-storage.token'
+import { OBJECT_STORAGE_TOKEN } from './object-storage.token'
 
 /**
  * Domain service for managing object storage.
@@ -27,7 +27,7 @@ export class ObjectStorageService {
 	private readonly storage: ObjectStoragePort
 
 	constructor(
-		@InjectPort(OBJECT_STORAGE_PROVIDER)
+		@InjectPort(OBJECT_STORAGE_TOKEN)
 		storage: ObjectStoragePort,
 	) {
 		this.storage = storage

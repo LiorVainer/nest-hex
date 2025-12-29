@@ -17,7 +17,7 @@
  * This token represents the abstract capability of storing and retrieving objects.
  * Different adapters (S3, Azure Blob, GCS, local filesystem) can provide this capability.
  */
-export const OBJECT_STORAGE_PROVIDER = Symbol('OBJECT_STORAGE_PROVIDER')
+export const OBJECT_STORAGE_TOKEN = Symbol('OBJECT_STORAGE_TOKEN')
 
 /**
  * Type alias for the token.
@@ -26,4 +26,4 @@ export const OBJECT_STORAGE_PROVIDER = Symbol('OBJECT_STORAGE_PROVIDER')
  * - AdapterModule<typeof OBJECT_STORAGE_PROVIDER>
  * - defineAdapter<typeof OBJECT_STORAGE_PROVIDER, Options>()
  */
-export type ObjectStorageToken = typeof OBJECT_STORAGE_PROVIDER
+export type ObjectStorageToken = typeof OBJECT_STORAGE_TOKEN

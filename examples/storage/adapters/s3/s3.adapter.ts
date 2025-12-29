@@ -11,7 +11,7 @@
  */
 
 import { Adapter, Port } from '../../../../src'
-import { OBJECT_STORAGE_PROVIDER } from '../../object-storage.token'
+import { OBJECT_STORAGE_TOKEN } from '../../object-storage.token'
 import { S3ObjectStorageService } from './s3.service'
 import type { S3Options } from './s3.types'
 
@@ -47,7 +47,7 @@ import type { S3Options } from './s3.types'
  * ```
  */
 @Port({
-	token: OBJECT_STORAGE_PROVIDER,
+	token: OBJECT_STORAGE_TOKEN,
 	implementation: S3ObjectStorageService,
 })
 export class S3Adapter extends Adapter<S3Options> {
