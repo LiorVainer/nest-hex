@@ -4,7 +4,7 @@
  * Generates port files (interface, service, module, token).
  */
 
-import { join } from 'path'
+import { join } from 'node:path'
 import type {
 	FileToGenerate,
 	GeneratorOptions,
