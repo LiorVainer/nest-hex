@@ -4,7 +4,7 @@
  * Generates port files (interface, service, module, token).
  */
 
-import * as path from 'node:path'
+import { join } from 'node:path'
 import type {
 	FileToGenerate,
 	GeneratorOptions,
@@ -34,39 +34,39 @@ export class PortGenerator extends BaseGenerator {
 		const outputDir =
 			options.outputPath ||
 			this.resolvePath(this.config.output?.portsDir || 'src/ports')
-		const portDir = path.join(outputDir, context.nameKebab)
+		const portDir = join(outputDir, context.nameKebab)
 
 		// Generate file list
 		const files: FileToGenerate[] = []
 
 		// 1. Port interface (always generated)
 		const interfaceContent = await this.renderTemplate(
-			path.join(templateDir, 'interface.ejs'),
+			join(templateDir, 'interface.ejs'),
 			context,
 		)
 		files.push({
-			path: path.join(portDir, `${context.nameKebab}.port.ts`),
+			path: join(portDir, `${context.nameKebab}.port.ts`),
 			content: interfaceContent,
 		})
 
 		// 2. Port token (always generated)
 		const tokenContent = await this.renderTemplate(
-			path.join(templateDir, 'token.ejs'),
+			join(templateDir, 'token.ejs'),
 			context,
 		)
 		files.push({
-			path: path.join(portDir, `${context.nameKebab}.token.ts`),
+			path: join(portDir, `${context.nameKebab}.token.ts`),
 			content: tokenContent,
 		})
 
 		// 3. Port service (optional based on includeService option)
 		if (context.includeService) {
 			const serviceContent = await this.renderTemplate(
-				path.join(templateDir, 'service.ejs'),
+				join(templateDir, 'service.ejs'),
 				context,
 			)
 			files.push({
-				path: path.join(portDir, `${context.nameKebab}.service.ts`),
+				path: join(portDir, `${context.nameKebab}.service.ts`),
 				content: serviceContent,
 			})
 		}
@@ -74,22 +74,22 @@ export class PortGenerator extends BaseGenerator {
 		// 4. Port module (optional based on includeModule option)
 		if (context.includeModule) {
 			const moduleContent = await this.renderTemplate(
-				path.join(templateDir, 'module.ejs'),
+				join(templateDir, 'module.ejs'),
 				context,
 			)
 			files.push({
-				path: path.join(portDir, `${context.nameKebab}.module.ts`),
+				path: join(portDir, `${context.nameKebab}.module.ts`),
 				content: moduleContent,
 			})
 		}
 
 		// 5. Index file (barrel export)
 		const indexContent = await this.renderTemplate(
-			path.join(templateDir, 'index.ejs'),
+			join(templateDir, 'index.ejs'),
 			context,
 		)
 		files.push({
-			path: path.join(portDir, 'index.ts'),
+			path: join(portDir, 'index.ts'),
 			content: indexContent,
 		})
 

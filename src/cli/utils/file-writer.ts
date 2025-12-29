@@ -1,9 +1,10 @@
 /**
  * File writing utilities with conflict detection
+ * Uses Bun's native APIs for faster performance
  */
 
-import * as fs from 'node:fs'
-import * as path from 'node:path'
+import { existsSync, mkdirSync } from 'node:fs'
+import { dirname } from 'node:path'
 
 export interface WriteOptions {
 	force?: boolean
@@ -26,7 +27,8 @@ export async function writeFile(
 	const { force = false, dryRun = false } = options
 
 	// Check if file exists
-	const existed = fs.existsSync(filePath)
+	const file = Bun.file(filePath)
+	const existed = await file.exists()
 
 	// If file exists and not forcing, return conflict
 	if (existed && !force && !dryRun) {
@@ -52,13 +54,13 @@ export async function writeFile(
 
 	try {
 		// Ensure directory exists
-		const dir = path.dirname(filePath)
-		if (!fs.existsSync(dir)) {
-			fs.mkdirSync(dir, { recursive: true })
+		const dir = dirname(filePath)
+		if (!existsSync(dir)) {
+			mkdirSync(dir, { recursive: true })
 		}
 
-		// Write file
-		fs.writeFileSync(filePath, content, 'utf8')
+		// Write file using Bun's fast file I/O
+		await Bun.write(filePath, content)
 
 		return {
 			success: true,
@@ -79,7 +81,7 @@ export async function writeFile(
 }
 
 export function ensureDirectory(dirPath: string): void {
-	if (!fs.existsSync(dirPath)) {
-		fs.mkdirSync(dirPath, { recursive: true })
+	if (!existsSync(dirPath)) {
+		mkdirSync(dirPath, { recursive: true })
 	}
 }

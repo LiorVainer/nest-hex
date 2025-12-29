@@ -4,7 +4,7 @@
  * Provides common functionality for all code generators.
  */
 
-import * as path from 'node:path'
+import { join } from 'node:path'
 import type {
 	FileToGenerate,
 	GeneratorContext,
@@ -98,8 +98,8 @@ export abstract class BaseGenerator {
 	 */
 	protected getTemplateDir(type: 'port' | 'adapter'): string {
 		// Templates are located in src/cli/templates/
-		const templatesRoot = path.join(__dirname, '..', 'templates')
-		return path.join(templatesRoot, type)
+		const templatesRoot = join(__dirname, '..', 'templates')
+		return join(templatesRoot, type)
 	}
 
 	/**

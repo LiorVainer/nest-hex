@@ -4,7 +4,7 @@
  * Generates adapter files (adapter class, service implementation, types).
  */
 
-import * as path from 'node:path'
+import { join } from 'node:path'
 import type {
 	FileToGenerate,
 	GeneratorOptions,
@@ -86,49 +86,49 @@ export class AdapterGenerator extends BaseGenerator {
 		const portNameKebab =
 			typeof context.portNameKebab === 'string' ? context.portNameKebab : ''
 		const adapterDir = options.portName
-			? path.join(outputDir, portNameKebab, context.nameKebab)
-			: path.join(outputDir, context.nameKebab)
+			? join(outputDir, portNameKebab, context.nameKebab)
+			: join(outputDir, context.nameKebab)
 
 		// Generate file list
 		const files: FileToGenerate[] = []
 
 		// 1. Adapter class (always generated)
 		const adapterContent = await this.renderTemplate(
-			path.join(templateDir, 'adapter.ejs'),
+			join(templateDir, 'adapter.ejs'),
 			context,
 		)
 		files.push({
-			path: path.join(adapterDir, `${context.nameKebab}.adapter.ts`),
+			path: join(adapterDir, `${context.nameKebab}.adapter.ts`),
 			content: adapterContent,
 		})
 
 		// 2. Service implementation (always generated)
 		const serviceContent = await this.renderTemplate(
-			path.join(templateDir, 'service.ejs'),
+			join(templateDir, 'service.ejs'),
 			context,
 		)
 		files.push({
-			path: path.join(adapterDir, `${context.nameKebab}.service.ts`),
+			path: join(adapterDir, `${context.nameKebab}.service.ts`),
 			content: serviceContent,
 		})
 
 		// 3. Types file (always generated)
 		const typesContent = await this.renderTemplate(
-			path.join(templateDir, 'types.ejs'),
+			join(templateDir, 'types.ejs'),
 			context,
 		)
 		files.push({
-			path: path.join(adapterDir, `${context.nameKebab}.types.ts`),
+			path: join(adapterDir, `${context.nameKebab}.types.ts`),
 			content: typesContent,
 		})
 
 		// 4. Index file (barrel export)
 		const indexContent = await this.renderTemplate(
-			path.join(templateDir, 'index.ejs'),
+			join(templateDir, 'index.ejs'),
 			context,
 		)
 		files.push({
-			path: path.join(adapterDir, 'index.ts'),
+			path: join(adapterDir, 'index.ts'),
 			content: indexContent,
 		})
 

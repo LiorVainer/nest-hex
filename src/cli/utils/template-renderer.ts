@@ -1,8 +1,8 @@
 /**
  * Template rendering utilities using EJS
+ * Uses Bun's native file reading for better performance
  */
 
-import * as fs from 'node:fs'
 import * as ejs from 'ejs'
 import type { TemplateContext } from '../types'
 
@@ -10,7 +10,8 @@ export async function renderTemplate(
 	templatePath: string,
 	context: TemplateContext,
 ): Promise<string> {
-	const template = fs.readFileSync(templatePath, 'utf8')
+	const file = Bun.file(templatePath)
+	const template = await file.text()
 	return ejs.render(template, context)
 }
 

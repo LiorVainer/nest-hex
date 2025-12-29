@@ -1,24 +1,25 @@
 /**
  * Configuration loader
+ * Uses Bun's native file checking for better performance
  */
 
-import * as fs from 'node:fs'
-import * as path from 'node:path'
+import { join } from 'node:path'
 import type { NestHexConfig } from '../types'
 import { defaultConfig } from './defaults'
 
 export async function loadConfig(
 	cwd: string = process.cwd(),
 ): Promise<NestHexConfig> {
-	const configPath = path.join(cwd, 'nest-hex.config.ts')
+	const configPath = join(cwd, 'nest-hex.config.ts')
 
-	if (!fs.existsSync(configPath)) {
+	// Use Bun's file API to check if config exists
+	const configFile = Bun.file(configPath)
+	if (!(await configFile.exists())) {
 		return defaultConfig
 	}
 
 	try {
-		// For simplicity, use dynamic import
-		// In production, you might want to use tsx or esbuild
+		// Dynamic import works natively in Bun with TypeScript
 		const config = await import(configPath)
 		return { ...defaultConfig, ...config.default }
 	} catch (error) {
