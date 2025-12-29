@@ -3,7 +3,7 @@ name: Release
 on:
   push:
     tags:
-      - 'v*'
+      - "v*"
 
 permissions:
   contents: write
@@ -11,28 +11,27 @@ permissions:
 
 jobs:
   release:
-    name: Release Package
+    name: Release to npm
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout code
+      # Checkout full history (required for tags / changelog tools)
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Setup Node
-        uses: actions/setup-node@v6
-        with:
-          node-version: '24'
-          registry-url: 'https://registry.npmjs.org'
-
+      # Bun only (no Node/npm setup)
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
 
+      # Install dependencies exactly as locked
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
+      # Static checks
       - name: Type check
         run: bun run type-check
 
@@ -42,17 +41,24 @@ jobs:
       - name: Run tests
         run: bun run test
 
-      - name: Build
+      # Build dist/ using bunup
+      - name: Build package
         run: bun run build
 
+      # Optional – generates GitHub release notes (non-blocking)
       - name: Generate changelog
         run: bunx changelogithub
         continue-on-error: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Update npm
-        run: npm install -g npm@latest
+      # Authenticate to npm (bun respects .npmrc)
+      - name: Authenticate npm
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: Publish packages to npm
-        run: bun pm pack && npm publish ./*.tgz --access public
+      # Publish to npm
+      - name: Publish to npm
+        run: bun publish --access public
