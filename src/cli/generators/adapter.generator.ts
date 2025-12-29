@@ -63,12 +63,10 @@ export class AdapterGenerator extends BaseGenerator {
 							.screamingSnake,
 						portTokenName: `${this.getNameVariations(options.portName).screamingSnake}_${this.config.naming?.portSuffix || 'PORT'}`,
 						portInterfaceName: `${this.getNameVariations(options.portName).pascal}Port`,
-						portTokenImport:
+						// Import both token and interface from the port's index file
+						portImportPath:
 							options.portPath ||
-							`../../${this.getNameVariations(options.portName).kebab}/${this.getNameVariations(options.portName).kebab}.token`,
-						portInterfaceImport:
-							options.portPath ||
-							`../../${this.getNameVariations(options.portName).kebab}/${this.getNameVariations(options.portName).kebab}.port`,
+							`../../${this.config.output?.portsDir || 'ports'}/${this.getNameVariations(options.portName).kebab}`,
 					}
 				: {}),
 		})
@@ -81,13 +79,9 @@ export class AdapterGenerator extends BaseGenerator {
 			this.resolvePath(this.config.output?.adaptersDir || 'src/adapters')
 
 		// Create adapter directory path
-		// If portName is provided, nest under port directory: adapters/{portName}/{adapterName}/
-		// Otherwise, flat structure: adapters/{adapterName}/
-		const portNameKebab =
-			typeof context.portNameKebab === 'string' ? context.portNameKebab : ''
-		const adapterDir = options.portName
-			? join(outputDir, portNameKebab, context.nameKebab)
-			: join(outputDir, context.nameKebab)
+		// Always use flat structure: adapters/{adapterName}/
+		// This makes the import path consistent: ../../ports/{portName}
+		const adapterDir = join(outputDir, context.nameKebab)
 
 		// Generate file list
 		const files: FileToGenerate[] = []

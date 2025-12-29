@@ -97,7 +97,9 @@ export abstract class BaseGenerator {
 	 * @param type - Generator type (port, adapter, service)
 	 * @returns Absolute path to template directory
 	 */
-	protected getTemplateDir(type: 'port' | 'adapter'): string {
+	protected getTemplateDir(
+		type: 'port' | 'adapter' | 'service' | 'examples',
+	): string {
 		// Templates are located in src/cli/templates/
 		const templatesRoot = join(__dirname, '..', 'templates')
 		return join(templatesRoot, type)
