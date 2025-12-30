@@ -27,7 +27,7 @@ export function ComponentSelector({
 	options,
 	onSubmit,
 	title,
-}: ComponentSelectorProps) {
+}: ComponentSelectorProps): JSX.Element {
 	const [selected, setSelected] = useState<string[]>([])
 
 	return (

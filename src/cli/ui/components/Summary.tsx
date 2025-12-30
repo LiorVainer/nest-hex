@@ -58,7 +58,7 @@ export function Summary({
 	outputPath,
 	files,
 	tips,
-}: SummaryProps) {
+}: SummaryProps): JSX.Element {
 	return (
 		<Box flexDirection="column" paddingY={1}>
 			<Box marginBottom={1}>

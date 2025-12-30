@@ -15,7 +15,7 @@ export interface TypeSelectorProps {
 /**
  * Component type selector (port, adapter, service, full).
  */
-export function TypeSelector({ onSubmit }: TypeSelectorProps) {
+export function TypeSelector({ onSubmit }: TypeSelectorProps): JSX.Element {
 	const [_selectedType, setSelectedType] = useState<string | undefined>()
 
 	const options = [

@@ -15,7 +15,7 @@ export interface FileProgressProps {
 /**
  * Shows progress for a single file generation.
  */
-export function FileProgress({ fileName, status, error }: FileProgressProps) {
+export function FileProgress({ fileName, status, error }: FileProgressProps): JSX.Element {
 	const getStatusIcon = () => {
 		switch (status) {
 			case 'completed':

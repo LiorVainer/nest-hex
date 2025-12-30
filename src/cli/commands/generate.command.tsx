@@ -479,7 +479,7 @@ function GenerateUI({ options }: { options: GenerateCommandOptions }) {
 /**
  * Execute generation command
  */
-export async function generateCommand(options: GenerateCommandOptions) {
+export async function generateCommand(options: GenerateCommandOptions): Promise<void> {
 	// Check if we're in an interactive terminal
 	const isInteractive =
 		process.stdin.isTTY && typeof process.stdin.setRawMode === 'function'

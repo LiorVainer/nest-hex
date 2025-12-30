@@ -20,7 +20,7 @@ export function Confirm({
 	message,
 	defaultValue = true,
 	onSubmit,
-}: ConfirmProps) {
+}: ConfirmProps): JSX.Element {
 	const options = [
 		{ label: 'Yes', value: 'yes' },
 		{ label: 'No', value: 'no' },
