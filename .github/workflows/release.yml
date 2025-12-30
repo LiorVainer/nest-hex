@@ -13,6 +13,7 @@ jobs:
   release:
     name: Release to npm
     runs-on: ubuntu-latest
+    environment: npm
 
     steps:
       # Checkout full history (required for tags / changelog tools)
@@ -52,7 +53,14 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      # Setup Node.js and npm for publishing (required for OIDC)
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+
       # Publish to npm using trusted publishing (OIDC)
-      # No authentication step needed - uses id-token permission
+      # Authentication happens automatically via id-token permission
       - name: Publish to npm
-        run: bunx npm publish --access public --provenance
+        run: npm publish --access public --provenance
