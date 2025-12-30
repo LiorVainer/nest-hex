@@ -1,5 +1,8 @@
 {
 	"$schema": "https://biomejs.dev/schemas/2.3.10/schema.json",
+	"files": {
+		"includes": ["src/**/*"]
+	},
 	"assist": {
 		"enabled": true,
 		"actions": {
@@ -10,6 +13,7 @@
 	},
 	"linter": {
 		"enabled": true,
+		"includes": ["src/**/*"],
 		"rules": {
 			"recommended": true,
 			"complexity": {

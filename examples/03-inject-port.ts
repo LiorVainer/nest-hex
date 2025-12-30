@@ -32,7 +32,7 @@ interface CachePort {
 
 // Step 3: Create a domain service that consumes ports
 @Injectable()
-class UserService {
+class _UserService {
 	private readonly logger: LoggerPort
 	private readonly cache: CachePort
 
@@ -108,7 +108,7 @@ class UserService {
  */
 
 @Injectable()
-class OrderService {
+class _OrderService {
 	private readonly logger: LoggerPort
 	private readonly cache: CachePort
 
