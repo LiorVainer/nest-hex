@@ -1,0 +1,91 @@
+/**
+ * Example Usage: {{namePascal}} with Async Registration
+ *
+ * This file demonstrates how to register and use the {{namePascal}} module
+ * with dynamic configuration using ConfigService (async registration).
+ *
+ * Use async registration when:
+ * - Configuration comes from environment variables
+ * - You need to inject ConfigService or other providers
+ * - Different environments need different configs
+ */
+
+import { Module, Controller, Get } from '@nestjs/common'
+import { ConfigModule, ConfigService } from '@nestjs/config'
+import { {{namePascal}}Module } from './{{nameKebab}}.module'
+import { {{namePascal}}Service } from './{{nameKebab}}.service'
+{{#if adapterName}}
+import { {{adapterName}}Adapter } from '{{adapterImportPath}}'
+import type { {{adapterName}}Options } from '{{adapterTypesImportPath}}'
+{{else}}
+// import { YourAdapter } from './adapters/your-adapter/your-adapter.adapter'
+// import type { YourAdapterOptions } from './adapters/your-adapter/your-adapter.types'
+{{/if}}
+
+/**
+ * Example controller showing how to use {{namePascal}}Service
+ */
+@Controller('{{nameKebab}}')
+export class {{namePascal}}Controller {
+	constructor(private readonly {{nameCamel}}Service: {{namePascal}}Service) {}
+
+	@Get('example')
+	async exampleEndpoint() {
+		// TODO: Use this.{{nameCamel}}Service.yourMethod()
+		return { message: '{{namePascal}} is working with async config!' }
+	}
+}
+
+/**
+ * App module with async registration using ConfigService
+ */
+@Module({
+	imports: [
+		// Load environment variables
+		ConfigModule.forRoot({
+			isGlobal: true,
+			envFilePath: '.env',
+		}),
+
+		// Async registration with ConfigService
+		{{namePascal}}Module.register({
+			adapter: {{#if adapterName}}{{adapterName}}Adapter{{else}}YourAdapter{{/if}}.registerAsync({
+				imports: [ConfigModule],
+				inject: [ConfigService],
+				useFactory: (config: ConfigService){{#if adapterName}}: {{adapterName}}Options{{/if}} => ({
+					// Load configuration from environment variables
+					// Example:
+					// apiKey: config.get<string>('{{nameScreamingSnake}}_API_KEY', ''),
+					// endpoint: config.get<string>('{{nameScreamingSnake}}_ENDPOINT', 'https://api.example.com'),
+					// timeout: config.get<number>('{{nameScreamingSnake}}_TIMEOUT', 5000),
+				}),
+			}),
+		}),
+	],
+	controllers: [{{namePascal}}Controller],
+})
+export class AppModule {}
+
+/**
+ * Environment Variables (.env file):
+ *
+ * {{nameScreamingSnake}}_API_KEY=your-api-key-here
+ * {{nameScreamingSnake}}_ENDPOINT=https://api.example.com
+ * {{nameScreamingSnake}}_TIMEOUT=5000
+ */
+
+/**
+ * Trade-offs of Async Registration:
+ *
+ * ✅ Pros:
+ * - Dynamic configuration from environment variables
+ * - Can inject ConfigService and other providers
+ * - Flexible for different environments (dev, staging, prod)
+ * - Best practice for production apps
+ *
+ * ⚠️ Cons:
+ * - More boilerplate code
+ * - Slightly more complex to understand
+ *
+ * For simple static configuration, see {{nameKebab}}.sync.example.ts
+ */

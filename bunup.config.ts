@@ -1,10 +1,12 @@
 import { defineConfig } from 'bunup'
 
+// Only build the main library with bunup
+// CLI will be built separately or run with tsx/bun directly
 const config: ReturnType<typeof defineConfig> = defineConfig({
 	entry: 'src/index.ts',
 	outDir: 'dist',
-	format: 'cjs', // Output CommonJS format
-	dts: true, // Generate .d.ts files
+	format: 'cjs',
+	dts: true,
 	clean: true,
 })
 

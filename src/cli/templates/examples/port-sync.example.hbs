@@ -1,0 +1,70 @@
+/**
+ * Example Usage: {{namePascal}} with Sync Registration
+ *
+ * This file demonstrates how to register and use the {{namePascal}} module
+ * with static configuration (sync registration).
+ *
+ * Use sync registration when:
+ * - Configuration is known at compile-time
+ * - No dependency injection needed for options
+ * - Simple, static setup
+ */
+
+import { Module, Controller, Get, Inject } from '@nestjs/common'
+import { {{namePascal}}Module } from './{{nameKebab}}.module'
+import { {{namePascal}}Service } from './{{nameKebab}}.service'
+{{#if adapterName}}
+import { {{adapterName}}Adapter } from '{{adapterImportPath}}'
+{{else}}
+// import { YourAdapter } from './adapters/your-adapter/your-adapter.adapter'
+{{/if}}
+
+/**
+ * Example controller showing how to use {{namePascal}}Service
+ */
+@Controller('{{nameKebab}}')
+export class {{namePascal}}Controller {
+	constructor(private readonly {{nameCamel}}Service: {{namePascal}}Service) {}
+
+	@Get('example')
+	async exampleEndpoint() {
+		// TODO: Use this.{{nameCamel}}Service.yourMethod()
+		return { message: '{{namePascal}} is working!' }
+	}
+}
+
+/**
+ * App module with sync registration
+ */
+@Module({
+	imports: [
+		// Sync registration with static configuration
+		{{namePascal}}Module.register({
+			adapter: {{#if adapterName}}{{adapterName}}Adapter{{else}}YourAdapter{{/if}}.register({
+				// Add your static configuration options here
+				// Example:
+				// apiKey: 'your-api-key',
+				// endpoint: 'https://api.example.com',
+				// timeout: 5000,
+			}),
+		}),
+	],
+	controllers: [{{namePascal}}Controller],
+})
+export class AppModule {}
+
+/**
+ * Trade-offs of Sync Registration:
+ *
+ * ✅ Pros:
+ * - Simple and straightforward
+ * - Less boilerplate
+ * - Easy to understand
+ *
+ * ⚠️ Cons:
+ * - Cannot use ConfigService or other injected dependencies
+ * - Configuration is hardcoded (no environment variables via ConfigService)
+ * - Less flexible for different environments
+ *
+ * For dynamic configuration with environment variables, see {{nameKebab}}.async.example.ts
+ */
