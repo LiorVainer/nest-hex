@@ -61,4 +61,6 @@ jobs:
 
       # Publish to npm
       - name: Publish to npm
-        run: bun publish --access public
+        run: bunx npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
