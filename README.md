@@ -4,7 +4,30 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## Why?
+## Why Hexagonal Architecture?
+
+**Hexagonal Architecture (Ports & Adapters)** is a powerful pattern for building maintainable, testable, and adaptable applications. Here's why it matters:
+
+### 🎯 Keep Domain Logic Pure
+Your business logic should never depend on infrastructure details like databases, APIs, or file systems. By defining **ports** (interfaces), your domain layer stays clean and focused on what matters: solving business problems.
+
+### 🔌 Pluggable Infrastructure
+Need to switch from AWS S3 to Google Cloud Storage? Replace MongoDB with PostgreSQL? Change from REST to GraphQL? With hexagonal architecture, you just swap the **adapter** – your domain logic never changes.
+
+### 🧪 Effortless Testing
+Mock external services by creating test adapters. No complex setup, no database connections, no API calls. Just simple, fast unit tests that focus on business logic.
+
+### 🌍 Environment Flexibility
+- **Development**: Use filesystem storage
+- **Testing**: Use in-memory mocks
+- **Production**: Use AWS S3
+
+Same domain code, different adapters. Configure once, swap anywhere.
+
+### 📦 Independent Deployment
+Infrastructure changes don't require redeploying your entire application. Update an adapter independently without touching core business logic.
+
+## Why This Library?
 
 Building NestJS applications with the Ports & Adapters pattern involves repetitive boilerplate:
 
@@ -14,7 +37,7 @@ Building NestJS applications with the Ports & Adapters pattern involves repetiti
 - Supporting both `register()` and `registerAsync()` patterns
 - Keeping the app responsible for configuration (no `process.env` in libraries)
 
-This library provides base classes and decorators to eliminate this boilerplate while maintaining compile-time type safety.
+**nest-hex eliminates this boilerplate** while maintaining compile-time type safety and providing a delightful developer experience through both decorators and a powerful CLI.
 
 ## Features
 
@@ -24,6 +47,126 @@ This library provides base classes and decorators to eliminate this boilerplate 
 - ⚡ **Zero runtime overhead**: Uses TypeScript decorators and metadata, minimal abstraction
 - 📦 **Tiny**: Core library is under 1KB minified
 - 🧪 **Testable**: Easily mock adapters for testing
+- 🛠️ **Powerful CLI**: Generate ports, adapters, and services with a single command
+
+## CLI
+
+**nest-hex** includes a powerful CLI to scaffold ports, adapters, and services instantly. No more manual file creation!
+
+### Quick Start
+
+```bash
+# Initialize configuration
+npx nest-hex init
+
+# Generate a port (domain interface)
+npx nest-hex generate port ObjectStorage
+
+# Generate an adapter for the port
+npx nest-hex generate adapter S3 --port ObjectStorage
+
+# Generate both port and adapter together
+npx nest-hex generate full ObjectStorage S3
+
+# Generate a service that uses a port
+npx nest-hex generate service FileUpload
+```
+
+### Available Commands
+
+#### `init`
+Create a `nest-hex.config.ts` configuration file in your project.
+
+```bash
+npx nest-hex init
+```
+
+#### `generate` (or `g`)
+Generate ports, adapters, services, or complete modules.
+
+```bash
+# Generate a port
+npx nest-hex generate port <name>
+npx nest-hex g port PaymentGateway
+
+# Generate an adapter
+npx nest-hex generate adapter <name> --port <portName>
+npx nest-hex g adapter Stripe --port PaymentGateway
+
+# Generate both port and adapter
+npx nest-hex generate full <portName> <adapterName>
+npx nest-hex g full EmailService SendGrid
+
+# Generate a service
+npx nest-hex generate service <name>
+npx nest-hex g service UserRegistration
+```
+
+### Interactive Mode
+
+Run commands without arguments for interactive prompts:
+
+```bash
+npx nest-hex generate
+# → Select type: port, adapter, service, or full
+# → Enter name(s)
+# → Files generated!
+```
+
+### Configuration
+
+The CLI uses `nest-hex.config.ts` to customize output paths and naming conventions:
+
+```typescript
+// nest-hex.config.ts
+import { defineConfig } from 'nest-hex/cli';
+
+export default defineConfig({
+  output: {
+    portsDir: 'src/domain/ports',      // Where to generate ports
+    adaptersDir: 'src/infrastructure', // Where to generate adapters
+    servicesDir: 'src/application',    // Where to generate services
+  },
+  naming: {
+    portSuffix: 'Port',     // ObjectStoragePort
+    tokenSuffix: '_PORT',   // OBJECT_STORAGE_PORT
+    adapterSuffix: 'Adapter', // S3Adapter
+    serviceSuffix: 'Service', // FileUploadService
+  },
+});
+```
+
+### What Gets Generated
+
+#### Port Generation
+Creates a complete port with:
+- Token definition (`OBJECT_STORAGE_PORT`)
+- TypeScript interface with example methods
+- Service implementation with `@InjectPort`
+- Module that accepts adapters
+- Barrel exports (`index.ts`)
+
+#### Adapter Generation
+Creates a production-ready adapter with:
+- Implementation service class
+- Options interface
+- Adapter class with `@Port` decorator
+- Complete TypeScript types
+- Barrel exports
+
+#### Service Generation
+Creates a domain service with:
+- Service class with `@InjectPort` usage
+- Type-safe port injection
+- Example business logic methods
+
+### CLI Benefits
+
+✅ **Instant scaffolding** - Generate complete, type-safe modules in seconds
+✅ **Consistent structure** - All team members follow the same patterns
+✅ **Best practices built-in** - Generated code follows hexagonal architecture principles
+✅ **Customizable** - Configure paths and naming to match your project
+✅ **Interactive** - Friendly prompts guide you through generation
 
 ## Installation
 
@@ -239,9 +382,11 @@ class AxiosAdapterClass extends Adapter<AxiosOptions> {
 }
 ```
 
-### Swapping Adapters
+### Swapping Adapters - The Power of Pluggability
 
-The beauty of the Ports & Adapters pattern is that you can easily swap implementations:
+**This is the core benefit of hexagonal architecture**: swap infrastructure without touching business logic.
+
+#### Environment-Based Swapping
 
 ```typescript
 // Development: Use filesystem storage
@@ -261,6 +406,40 @@ const adapter = process.env.NODE_ENV === 'production'
 })
 export class AppModule {}
 ```
+
+#### Multi-Cloud Strategy
+
+```typescript
+// Easily switch cloud providers without changing domain code
+const storageAdapter = process.env.CLOUD_PROVIDER === 'aws'
+  ? S3Adapter.register({ bucket: 'my-bucket', region: 'us-east-1' })
+  : process.env.CLOUD_PROVIDER === 'gcp'
+  ? GCSAdapter.register({ bucket: 'my-bucket' })
+  : AzureBlobAdapter.register({ containerName: 'my-container' });
+```
+
+#### Feature Flags
+
+```typescript
+// Gradually migrate to new infrastructure
+const emailAdapter = featureFlags.useNewEmailProvider
+  ? SendGridAdapter.register({ apiKey: process.env.SENDGRID_KEY })
+  : SESAdapter.register({ region: 'us-east-1' });
+```
+
+#### Testing with Mocks
+
+```typescript
+// Test module: in-memory mock
+const testAdapter = MockStorageAdapter.register();
+
+// Production module: real infrastructure
+const prodAdapter = S3Adapter.register({ bucket: 'prod' });
+
+// Same domain code, different runtime behavior
+```
+
+**Key Point**: Your `StorageService` business logic **never changes**. Only the infrastructure adapter changes. This is the essence of maintainable architecture.
 
 ### Testing with Mock Adapters
 
