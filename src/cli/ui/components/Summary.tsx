@@ -6,6 +6,7 @@
 
 import { relative } from 'node:path'
 import { Box, Text } from 'ink'
+import React from 'react'
 
 export interface SummaryProps {
 	success: boolean
@@ -95,9 +96,7 @@ export function Summary({
 						return (
 							// biome-ignore lint/suspicious/noArrayIndexKey: For Cli UI only
 							<Box key={index} marginLeft={2}>
-								<Text color="cyan" dimColor>
-									•
-								</Text>
+								<Text dimColor>• </Text>
 								<Text color="cyan">{linkText}</Text>
 							</Box>
 						)
