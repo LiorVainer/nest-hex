@@ -6,7 +6,6 @@
 
 import { TextInput } from '@inkjs/ui'
 import { Box, Text } from 'ink'
-import React from 'react'
 
 export interface NameInputProps {
 	type: 'port' | 'adapter' | 'service' | 'full'
@@ -31,7 +30,7 @@ export function NameInput({ type, step, onSubmit }: NameInputProps) {
 		}
 
 		return (
-			<Box flexDirection="column">
+			<Box flexDirection="column" padding={1}>
 				<Box marginBottom={1}>
 					<Text bold color="cyan">
 						{labels[currentStep]}:
@@ -46,6 +45,10 @@ export function NameInput({ type, step, onSubmit }: NameInputProps) {
 						}
 					}}
 				/>
+
+				<Box marginTop={1}>
+					<Text dimColor>Press ← to go back</Text>
+				</Box>
 			</Box>
 		)
 	}
@@ -59,7 +62,7 @@ export function NameInput({ type, step, onSubmit }: NameInputProps) {
 	}
 
 	return (
-		<Box flexDirection="column">
+		<Box flexDirection="column" padding={1}>
 			<Box marginBottom={1}>
 				<Text bold color="cyan">
 					Enter the name for your {type}:
@@ -74,6 +77,13 @@ export function NameInput({ type, step, onSubmit }: NameInputProps) {
 					}
 				}}
 			/>
+
+			<Box marginTop={1}>
+				<Text dimColor>
+					Press ← to go back
+					{type === 'adapter' && ' to port selection'}
+				</Text>
+			</Box>
 		</Box>
 	)
 }

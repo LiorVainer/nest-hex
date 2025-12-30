@@ -4,8 +4,8 @@
  * Main command for generating ports, adapters, and services.
  */
 
-import { Box, render, Text } from 'ink'
-import React, { useEffect, useState } from 'react'
+import { Box, render, Text, useInput } from 'ink'
+import { useEffect, useState } from 'react'
 import { loadConfig } from '../config/loader'
 import {
 	AdapterGenerator,
@@ -15,6 +15,7 @@ import {
 import type { GeneratorResult } from '../types'
 import {
 	NameInput,
+	PortSelector,
 	ProgressIndicator,
 	type ProgressStep,
 	Summary,
@@ -22,6 +23,8 @@ import {
 } from '../ui/components'
 import { detectLinter } from '../utils/linter-detector'
 import { runLinter } from '../utils/linter-runner'
+import type { PortInfo } from '../utils/port-scanner'
+import { scanAvailablePorts } from '../utils/port-scanner'
 
 interface GenerateCommandOptions {
 	type?: 'port' | 'adapter' | 'service' | 'full'
@@ -55,7 +58,13 @@ function GenerateUI({ options }: { options: GenerateCommandOptions }) {
 	const [adapterName, setAdapterName] = useState<string | undefined>(
 		options.adapterName,
 	)
+	const [selectedPortInfo, setSelectedPortInfo] = useState<PortInfo | null>(
+		null,
+	)
+	const [availablePorts, setAvailablePorts] = useState<PortInfo[]>([])
+	const [portsLoaded, setPortsLoaded] = useState(false)
 	const [showTypeSelector, setShowTypeSelector] = useState(!options.type)
+	const [showPortSelector, setShowPortSelector] = useState(false)
 	const [showNameInput, setShowNameInput] = useState(() => {
 		// Show name input if type is provided but names are missing
 		if (!options.type) return false
@@ -80,13 +89,62 @@ function GenerateUI({ options }: { options: GenerateCommandOptions }) {
 	const handleTypeSelect = (type: 'port' | 'adapter' | 'service' | 'full') => {
 		setSelectedType(type)
 		setShowTypeSelector(false)
-		if (!options.name) {
+
+		// For adapter type, show port selector first
+		if (type === 'adapter' && !options.name) {
+			setShowPortSelector(true)
+		} else if (!options.name) {
 			setShowNameInput(true)
 			if (type === 'full') {
 				setNameInputStep('port')
 			}
 		}
 	}
+
+	// Handle port selection for adapter
+	const handlePortSelect = (portInfo: PortInfo) => {
+		setSelectedPortInfo(portInfo)
+		setShowPortSelector(false)
+		setShowNameInput(true)
+	}
+
+	// Handle going back from port selector to type selector
+	const handlePortBack = () => {
+		setShowPortSelector(false)
+		setShowTypeSelector(true)
+		setSelectedType(undefined)
+	}
+
+	// Handle left arrow key press for back navigation
+	useInput((_input, key) => {
+		if (key.leftArrow) {
+			if (showPortSelector) {
+				handlePortBack()
+			} else if (showNameInput && !result && !error) {
+				// Go back from name input
+				if (selectedType === 'adapter') {
+					setShowNameInput(false)
+					setShowPortSelector(true)
+				} else if (selectedType === 'full') {
+					if (nameInputStep === 'adapter') {
+						// Go back to port name input
+						setNameInputStep('port')
+						setAdapterName(undefined)
+					} else {
+						// Go back to type selector
+						setShowNameInput(false)
+						setShowTypeSelector(true)
+						setSelectedType(undefined)
+					}
+				} else {
+					// For port and service, go back to type selector
+					setShowNameInput(false)
+					setShowTypeSelector(true)
+					setSelectedType(undefined)
+				}
+			}
+		}
+	})
 
 	// Handle name input
 	const handleNameInput = (name: string) => {
@@ -104,6 +162,17 @@ function GenerateUI({ options }: { options: GenerateCommandOptions }) {
 			setShowNameInput(false)
 		}
 	}
+
+	// Load available ports when port selector is shown
+	useEffect(() => {
+		if (showPortSelector && !portsLoaded) {
+			loadConfig().then((cfg) => {
+				const ports = scanAvailablePorts(cfg)
+				setAvailablePorts(ports)
+				setPortsLoaded(true)
+			})
+		}
+	}, [showPortSelector, portsLoaded])
 
 	useEffect(() => {
 		// Only start generation when we have required names
@@ -198,28 +267,43 @@ function GenerateUI({ options }: { options: GenerateCommandOptions }) {
 					const name = selectedName
 					let generator: PortGenerator | AdapterGenerator | ServiceGenerator
 
-					const generatorOptions = {
-						name,
-						portName: options.port,
-						outputPath: options.outputPath,
-						dryRun: options.dryRun,
-					}
-
 					switch (type) {
-						case 'port':
+						case 'port': {
 							generator = new PortGenerator(config)
+							const portOptions = {
+								name,
+								outputPath: options.outputPath,
+								dryRun: options.dryRun,
+							}
+							genResult = await generator.generate(portOptions)
 							break
-						case 'adapter':
+						}
+						case 'adapter': {
 							generator = new AdapterGenerator(config)
+							const adapterOptions = {
+								name,
+								portName: selectedPortInfo?.name || options.port,
+								portPath: selectedPortInfo?.tokenImportPath,
+								portTokenName: selectedPortInfo?.tokenName,
+								outputPath: options.outputPath,
+								dryRun: options.dryRun,
+							}
+							genResult = await generator.generate(adapterOptions)
 							break
-						case 'service':
+						}
+						case 'service': {
 							generator = new ServiceGenerator(config)
+							const serviceOptions = {
+								name,
+								outputPath: options.outputPath,
+								dryRun: options.dryRun,
+							}
+							genResult = await generator.generate(serviceOptions)
 							break
+						}
 						default:
 							throw new Error(`Unknown generator type: ${type}`)
 					}
-
-					genResult = await generator.generate(generatorOptions)
 				} else {
 					throw new Error(
 						'Invalid state: selectedName is required for non-full generator types',
@@ -296,11 +380,35 @@ function GenerateUI({ options }: { options: GenerateCommandOptions }) {
 		}
 
 		generate()
-	}, [selectedType, selectedName, portName, adapterName, options])
+	}, [
+		selectedType,
+		selectedName,
+		portName,
+		adapterName,
+		options,
+		selectedPortInfo?.name,
+		selectedPortInfo?.tokenImportPath,
+		selectedPortInfo?.tokenName,
+	])
 
 	// Show type selector if type not provided
 	if (showTypeSelector) {
 		return <TypeSelector onSubmit={handleTypeSelect} />
+	}
+
+	// Show port selector for adapter type
+	if (showPortSelector && selectedType === 'adapter') {
+		if (!portsLoaded) {
+			return <Text>Loading available ports...</Text>
+		}
+
+		return (
+			<PortSelector
+				ports={availablePorts}
+				onSubmit={handlePortSelect}
+				onBack={handlePortBack}
+			/>
+		)
 	}
 
 	// Show name input if name not provided

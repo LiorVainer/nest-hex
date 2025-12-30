@@ -6,7 +6,6 @@
 
 import { Select } from '@inkjs/ui'
 import { Box, Text } from 'ink'
-import React from 'react'
 
 export interface ConfirmProps {
 	message: string

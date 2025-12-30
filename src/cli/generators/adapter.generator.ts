@@ -29,6 +29,12 @@ export interface AdapterGeneratorOptions extends GeneratorOptions {
 	portPath?: string
 
 	/**
+	 * Port token name (e.g., "OBJECT_STORAGE_PORT").
+	 * Used in the @Port decorator.
+	 */
+	portTokenName?: string
+
+	/**
 	 * Technology or service being adapted (e.g., "AWS S3", "HTTP API").
 	 * Used in documentation comments.
 	 */
@@ -82,7 +88,10 @@ export class AdapterGenerator extends BaseGenerator {
 						portNamePascal: portNameVariations.pascal,
 						portNameCamel: portNameVariations.camel,
 						portNameScreamingSnake: portNameVariations.screamingSnake,
-						portTokenName: `${portNameVariations.screamingSnake}_${this.config.naming?.portSuffix || 'PORT'}`,
+						// Use provided portTokenName, or generate it from naming convention
+						portTokenName:
+							options.portTokenName ||
+							`${portNameVariations.screamingSnake}_${this.config.naming?.portSuffix || 'PORT'}`,
 						portInterfaceName: `${portNameVariations.pascal}Port`,
 						// Import both token and interface from the port's index file
 						portImportPath: options.portPath || portImportPath,

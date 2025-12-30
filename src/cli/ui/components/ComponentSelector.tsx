@@ -6,7 +6,7 @@
 
 import { MultiSelect } from '@inkjs/ui'
 import { Box, Text } from 'ink'
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 export interface ComponentOption {
 	value: string

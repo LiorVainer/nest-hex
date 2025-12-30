@@ -6,7 +6,7 @@
 
 import { Select } from '@inkjs/ui'
 import { Box, Text } from 'ink'
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 export interface TypeSelectorProps {
 	onSubmit: (type: 'port' | 'adapter' | 'service' | 'full') => void

@@ -6,7 +6,6 @@
 
 import { Spinner } from '@inkjs/ui'
 import { Box, Text } from 'ink'
-import React from 'react'
 
 export interface ProgressStep {
 	id: string

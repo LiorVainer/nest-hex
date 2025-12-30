@@ -5,7 +5,6 @@
  */
 
 import { Box, Text } from 'ink'
-import React from 'react'
 
 export interface FileProgressProps {
 	fileName: string

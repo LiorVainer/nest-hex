@@ -7,7 +7,6 @@
 import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { Box, render, Text } from 'ink'
-import React from 'react'
 
 const CONFIG_TEMPLATE = `import { defineConfig } from 'nest-hex/cli'
 
