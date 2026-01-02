@@ -130,7 +130,7 @@ console.log('SMTP adapter module:', smtpModule)
  * AdapterBase.register({ portToken: EMAIL_PROVIDER, impl: SendGridService, options: {...} })
  *
  * ✅ With @Adapter decorator (concise, declarative):
- * SendGridAdapter.register({ apiKey: '...', fromEmail: '...' })
+ * S	endGridAdapter.register({ apiKey: '...', fromEmail: '...' })
  *
  * Benefits:
  * - Declare once (at class level), use everywhere

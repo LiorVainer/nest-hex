@@ -69,5 +69,6 @@ jobs:
 
       # Publish to npm using trusted publishing (OIDC)
       # Authentication happens automatically via id-token permission
+      # Provenance is automatically generated with OIDC (no --provenance flag needed)
       - name: Publish to npm
-        run: npm publish --access public --provenance
+        run: npm publish --access public
