@@ -61,6 +61,10 @@ jobs:
           # Note: Do NOT set registry-url when using OIDC trusted publishing
           # OIDC authentication happens automatically via id-token permission
 
+      # Upgrade npm to latest version (required for OIDC support - needs npm >= 9.8.0)
+      - name: Upgrade npm
+        run: npm install -g npm@latest
+
       # Debug: Check npm version and configuration
       - name: Debug npm configuration
         run: |
