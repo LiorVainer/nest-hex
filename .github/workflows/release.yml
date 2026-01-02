@@ -57,7 +57,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
           # Note: Do NOT set registry-url when using OIDC trusted publishing
           # OIDC authentication happens automatically via id-token permission
 
