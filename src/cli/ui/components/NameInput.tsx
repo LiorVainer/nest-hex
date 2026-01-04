@@ -4,10 +4,10 @@
  * Interactive name input with tab-completion for placeholder suggestions.
  */
 
+import { Badge } from '@inkjs/ui'
 import { Box, Text, useInput } from 'ink'
 import TextInput from 'ink-text-input'
 import { useState } from 'react'
-import { CustomBadge } from './CustomBadge'
 
 export interface NameInputProps {
 	type: 'port' | 'adapter' | 'service' | 'full'
@@ -73,8 +73,8 @@ export function NameInput({
 			<Box flexDirection="column">
 				{/* Show port name badge when asking for adapter name */}
 				{currentStep === 'adapter' && portName && (
-					<Box>
-						<CustomBadge color="blue">Port: {portName}</CustomBadge>
+					<Box marginBottom={1}>
+						<Badge color="blue">Port: {portName}</Badge>
 					</Box>
 				)}
 

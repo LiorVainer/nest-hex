@@ -5,8 +5,8 @@
  */
 
 import { relative } from 'node:path'
+import { Badge } from '@inkjs/ui'
 import { Box, Text } from 'ink'
-import { CustomBadge } from './CustomBadge'
 
 export interface SummaryProps {
 	success: boolean
@@ -109,7 +109,7 @@ export function Summary({
 		})
 
 	return (
-		<Box flexDirection="column" paddingY={1}>
+		<Box flexDirection="column">
 			<Box marginBottom={1}>
 				{success ? (
 					<Text color="green" bold>
@@ -134,8 +134,8 @@ export function Summary({
 				<Box flexDirection="column" marginBottom={1}>
 					{portFiles && portFiles.length > 0 && (
 						<Box flexDirection="column" marginBottom={1}>
-							<Box>
-								<CustomBadge color="blue">Port: {portName}</CustomBadge>
+							<Box marginBottom={1}>
+								<Badge color="blue">Port: {portName}</Badge>
 							</Box>
 							{renderFileList(portFiles)}
 						</Box>
@@ -143,8 +143,8 @@ export function Summary({
 
 					{adapterFiles && adapterFiles.length > 0 && (
 						<Box flexDirection="column" marginBottom={1}>
-							<Box>
-								<CustomBadge color="green">Adapter: {adapterName}</CustomBadge>
+							<Box marginBottom={1}>
+								<Badge color="green">Adapter: {adapterName}</Badge>
 							</Box>
 							{renderFileList(adapterFiles)}
 						</Box>
@@ -152,8 +152,8 @@ export function Summary({
 
 					{serviceFiles && serviceFiles.length > 0 && (
 						<Box flexDirection="column">
-							<Box>
-								<CustomBadge color="cyan">Service: {serviceName}</CustomBadge>
+							<Box marginBottom={1}>
+								<Badge color="cyan">Service: {serviceName}</Badge>
 							</Box>
 							{renderFileList(serviceFiles)}
 						</Box>

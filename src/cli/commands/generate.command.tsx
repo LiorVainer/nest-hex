@@ -87,6 +87,7 @@ function GenerateUI({ options }: { options: GenerateCommandOptions }) {
 	const [adapterResultFiles, setAdapterResultFiles] = useState<
 		string[] | undefined
 	>()
+	const [duration, setDuration] = useState<number | undefined>()
 	const [error, setError] = useState<Error | null>(null)
 
 	// Handle type selection
@@ -197,6 +198,7 @@ function GenerateUI({ options }: { options: GenerateCommandOptions }) {
 		}
 
 		async function generate() {
+			const startTime = Date.now()
 			try {
 				// Step 1: Load configuration
 				setSteps([
@@ -319,6 +321,7 @@ function GenerateUI({ options }: { options: GenerateCommandOptions }) {
 				}
 
 				setResult(genResult)
+				setDuration(Date.now() - startTime)
 
 				setSteps((prev: ProgressStep[]) =>
 					prev.map((s: ProgressStep) =>
@@ -483,11 +486,11 @@ function GenerateUI({ options }: { options: GenerateCommandOptions }) {
 
 		return (
 			<Box flexDirection="column">
-				<ProgressIndicator steps={steps} title={getTitle()} />
 				<Summary
 					success={result.success}
 					filesGenerated={result.files?.length || 0}
 					totalFiles={result.files?.length || 0}
+					duration={duration}
 					outputPath={options.outputPath}
 					files={
 						selectedType === 'full' ? undefined : result.files
