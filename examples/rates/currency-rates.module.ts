@@ -8,6 +8,7 @@
 import { Module } from '@nestjs/common'
 import { PortModule } from '../../src'
 import type { CurrencyRatesService } from './currency-rates.service'
+import type { CurrencyRatesToken } from './currency-rates.token'
 
 /**
  * Port module for currency exchange rates.
@@ -33,7 +34,7 @@ import type { CurrencyRatesService } from './currency-rates.service'
  * ```
  */
 @Module({})
-export class CurrencyRatesModule extends PortModule {}
+export class CurrencyRatesModule extends PortModule<CurrencyRatesToken> {}
 
 /**
  * Swapping Adapters Example:

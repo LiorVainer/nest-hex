@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common'
 import { PortModule } from '{{coreImportPath}}'
 import type { {{namePascal}}Service } from './{{nameKebab}}.service'
+import type { {{namePascal}}Token } from './{{nameKebab}}.token'
 
 @Module({})
-export class {{namePascal}}Module extends PortModule {}
+export class {{namePascal}}Module extends PortModule<{{namePascal}}Token> {}
