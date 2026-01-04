@@ -84,6 +84,7 @@
 		"pre-commit": "bun run lint:fix && bun run type-check"
 	},
 	"dependencies": {
+		"ink-text-input": "^6.0.0",
 		"ts-deepmerge": "^7.0.3"
 	}
 }

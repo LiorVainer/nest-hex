@@ -4,6 +4,7 @@
 
 export * from './ComponentSelector'
 export * from './Confirm'
+export * from './CustomBadge'
 export * from './FileProgress'
 export * from './NameInput'
 export * from './PortSelector'

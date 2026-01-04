@@ -24,19 +24,24 @@ export function PortSelector({
 }: PortSelectorProps): JSX.Element {
 	if (ports.length === 0) {
 		return (
-			<Box flexDirection="column" padding={1}>
-				<Text color="yellow" bold>
-					⚠ No ports found
-				</Text>
-				<Box marginTop={1}>
+			<Box flexDirection="column">
+				<Box paddingX={1} marginBottom={1}>
+					<Text color="yellow" bold>
+						⚠ No ports found
+					</Text>
+				</Box>
+
+				<Box paddingX={1} marginBottom={1}>
 					<Text>You must create a port before generating an adapter.</Text>
 				</Box>
-				<Box marginTop={1}>
+
+				<Box paddingX={1} marginBottom={1}>
 					<Text dimColor>Generate a port first:</Text>
 					<Text color="cyan"> nest-hex generate port</Text>
 				</Box>
-				<Box marginTop={1}>
-					<Text dimColor>Press ← to go back</Text>
+
+				<Box paddingX={1} marginTop={1}>
+					<Text dimColor>Press Ctrl+Q to go back</Text>
 				</Box>
 			</Box>
 		)
@@ -48,26 +53,41 @@ export function PortSelector({
 	}))
 
 	return (
-		<Box flexDirection="column" padding={1}>
-			<Box marginBottom={1}>
-				<Text bold>Select Port to Implement</Text>
+		<Box flexDirection="column">
+			<Box paddingX={1}>
+				<Text bold color="cyan">
+					Select Port to Implement:
+				</Text>
 			</Box>
 
-			<Select
-				options={options}
-				onChange={(selectedValue) => {
-					const selectedPort = ports.find((p) => p.name === selectedValue)
-					if (selectedPort) {
-						onSubmit(selectedPort)
-					}
-				}}
-			/>
+			<Box
+				borderTop
+				borderBottom
+				borderLeft={false}
+				borderRight={false}
+				borderStyle="single"
+				borderColor="gray"
+				paddingX={1}
+			>
+				<Select
+					options={options}
+					onChange={(selectedValue) => {
+						const selectedPort = ports.find((p) => p.name === selectedValue)
+						if (selectedPort) {
+							onSubmit(selectedPort)
+						}
+					}}
+				/>
+			</Box>
 
-			<Box marginTop={1} flexDirection="column">
+			<Box paddingX={1}>
 				<Text dimColor>
 					This adapter will implement the selected port interface
 				</Text>
-				<Text dimColor>Press ← to go back to type selection</Text>
+			</Box>
+
+			<Box paddingX={1}>
+				<Text dimColor>Press Ctrl+Q to go back</Text>
 			</Box>
 		</Box>
 	)

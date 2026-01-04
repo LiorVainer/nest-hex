@@ -83,6 +83,10 @@ function GenerateUI({ options }: { options: GenerateCommandOptions }) {
 	const [steps, setSteps] = useState<ProgressStep[]>([])
 	const [_files, _setFiles] = useState<FileProgresState[]>([])
 	const [result, setResult] = useState<GeneratorResult | null>(null)
+	const [portResultFiles, setPortResultFiles] = useState<string[] | undefined>()
+	const [adapterResultFiles, setAdapterResultFiles] = useState<
+		string[] | undefined
+	>()
 	const [error, setError] = useState<Error | null>(null)
 
 	// Handle type selection
@@ -115,9 +119,9 @@ function GenerateUI({ options }: { options: GenerateCommandOptions }) {
 		setSelectedType(undefined)
 	}
 
-	// Handle left arrow key press for back navigation
-	useInput((_input, key) => {
-		if (key.leftArrow) {
+	// Handle Ctrl+Q key press for back navigation
+	useInput((input, key) => {
+		if (key.ctrl && input === 'q') {
 			if (showPortSelector) {
 				handlePortBack()
 			} else if (showNameInput && !result && !error) {
@@ -248,6 +252,10 @@ function GenerateUI({ options }: { options: GenerateCommandOptions }) {
 						outputPath: options.outputPath,
 						dryRun: options.dryRun,
 					})
+
+					// Store separate file arrays for display
+					setPortResultFiles(portResult.files)
+					setAdapterResultFiles(adapterResult.files)
 
 					// Combine results
 					genResult = {
@@ -417,6 +425,11 @@ function GenerateUI({ options }: { options: GenerateCommandOptions }) {
 			<NameInput
 				type={selectedType}
 				step={selectedType === 'full' ? nameInputStep : undefined}
+				portName={
+					selectedType === 'full' && nameInputStep === 'adapter'
+						? portName
+						: undefined
+				}
 				onSubmit={handleNameInput}
 			/>
 		)
@@ -452,6 +465,22 @@ function GenerateUI({ options }: { options: GenerateCommandOptions }) {
 		selectedType &&
 		(selectedType === 'full' ? portName && adapterName : selectedName)
 	) {
+		// Determine which component names to pass to Summary
+		const summaryPortName =
+			selectedType === 'full'
+				? portName
+				: selectedType === 'port'
+					? selectedName
+					: undefined
+		const summaryAdapterName =
+			selectedType === 'full'
+				? adapterName
+				: selectedType === 'adapter'
+					? selectedName
+					: undefined
+		const summaryServiceName =
+			selectedType === 'service' ? selectedName : undefined
+
 		return (
 			<Box flexDirection="column">
 				<ProgressIndicator steps={steps} title={getTitle()} />
@@ -460,7 +489,11 @@ function GenerateUI({ options }: { options: GenerateCommandOptions }) {
 					filesGenerated={result.files?.length || 0}
 					totalFiles={result.files?.length || 0}
 					outputPath={options.outputPath}
-					files={result.files}
+					files={
+						selectedType === 'full' ? undefined : result.files
+					} /* Don't pass files array for full mode */
+					portFiles={portResultFiles}
+					adapterFiles={adapterResultFiles}
 					tips={[
 						'Import generated files in your modules',
 						selectedType === 'port' && selectedName
@@ -468,6 +501,9 @@ function GenerateUI({ options }: { options: GenerateCommandOptions }) {
 								selectedName
 							: undefined,
 					].filter((t): t is string => t !== undefined)}
+					portName={summaryPortName}
+					adapterName={summaryAdapterName}
+					serviceName={summaryServiceName}
 				/>
 			</Box>
 		)
