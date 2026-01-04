@@ -33,9 +33,7 @@ import type { CurrencyRatesService } from './currency-rates.service'
  * ```
  */
 @Module({})
-export class CurrencyRatesModule extends PortModule<
-	typeof CurrencyRatesService
-> {}
+export class CurrencyRatesModule extends PortModule {}
 
 /**
  * Swapping Adapters Example:

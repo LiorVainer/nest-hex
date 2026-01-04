@@ -8,8 +8,6 @@ import type { AdapterModule } from './types'
  * Port modules expose domain services that consume ports (via adapters) through dependency injection.
  * This base class simplifies creating modules that accept and import adapter modules.
  *
- * @template _TService - The service class provided by this port module (used for type constraints)
- *
  * @example
  * ```typescript
  * const STORAGE_TOKEN = Symbol('STORAGE_PORT');
@@ -23,7 +21,7 @@ import type { AdapterModule } from './types'
  * }
  *
  * @Module({})
- * export class FileModule extends PortModule<typeof FileService> {}
+ * export class FileModule extends PortModule {}
  *
  * // Usage:
  * FileModule.register({
@@ -32,7 +30,7 @@ import type { AdapterModule } from './types'
  * ```
  */
 @Module({})
-export class PortModule<_TService> {
+export class PortModule {
 	/**
 	 * Registers the port module with an adapter.
 	 *

@@ -38,7 +38,7 @@ describe('PortModule.register()', () => {
 
 	it('should be extensible by domain modules', () => {
 		// Test that PortModule can be extended by custom modules
-		class CustomPortModule extends PortModule<object> {}
+		class CustomPortModule extends PortModule {}
 
 		const module = CustomPortModule.register({
 			adapter: TestStorageAdapter.register({ prefix: 'custom-' }),

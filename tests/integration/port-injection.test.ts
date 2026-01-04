@@ -95,7 +95,7 @@ describe('Port Token Injection (Integration)', () => {
 			@Module({
 				providers: [],
 			})
-			class StorageFeatureModule extends PortModule<object> {}
+			class StorageFeatureModule extends PortModule {}
 
 			const module = await Test.createTestingModule({
 				imports: [

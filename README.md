@@ -136,7 +136,7 @@ import { PortModule } from 'nest-hex'
 import { FileService } from './file.service'
 
 @Module({})
-export class FileModule extends PortModule<typeof FileService> {}
+export class FileModule extends PortModule {}
 ```
 
 ### 5. Wire It Up
