@@ -4,7 +4,7 @@ This directory contains comprehensive, working examples demonstrating all APIs p
 
 ## Quick Start
 
-The examples are organized by complexity. Start with the basic examples (01-03) to understand core concepts, then explore the complete scenarios in the domain folders.
+The examples are organized by complexity. Start with the basic examples (01-02) to understand core concepts, then explore the complete scenarios in the domain folders.
 
 ### Type-Checking Examples
 
@@ -16,12 +16,12 @@ bun run type-check:examples
 
 ## Organization
 
-### Basic Examples (`02-03-*.ts`)
+### Basic Examples (`01-02-*.ts`)
 
 Foundational examples showing individual APIs in isolation:
 
-- `02-decorator-basics.ts` - Using `@Adapter` decorator
-- `03-inject-port.ts` - Injecting ports with `@InjectPort` decorator
+- `01-decorator-basics.ts` - Using `@Adapter` decorator
+- `02-inject-port.ts` - Injecting ports with `@InjectPort` decorator
 
 ### Complete Scenarios
 
@@ -76,7 +76,7 @@ Examples showing advanced customization techniques:
 
 ## Learning Path
 
-1. **Start here**: Read the basic examples (01-03) to understand core APIs
+1. **Start here**: Read the basic examples (01-02) to understand core APIs
 2. **Pick a scenario**: Choose either storage or rates to see a complete implementation
 3. **See integration**: Read the app integration examples to understand wiring
 4. **Learn testing**: Explore the testing examples for test patterns
@@ -93,20 +93,11 @@ This library implements the Ports & Adapters (Hexagonal Architecture) pattern:
 - **Feature Modules** contain domain logic and depend on ports, not adapters
 - **Apps** wire everything together by choosing which adapters to use
 
-### Type Safety
-
-The library provides compile-time type safety through:
-
-- `AdapterModule<TToken>` - Carries proof of which token an adapter provides
-- `defineAdapter<TToken, TOptions>()` - Verifies adapter signatures at compile time
-- `FeatureModule<TService>` - Ensures feature modules receive compatible adapters
-
 ### Decorator-Driven API
 
 Adapters are configured using decorators to minimize boilerplate:
 
-- `@AdapterToken(TOKEN)` - Declares which port token the adapter provides
-- `@AdapterImpl(ServiceClass)` - Declares the implementation class
+- `@Adapter` - Declares the port token and implementation class
 - `@InjectPort(TOKEN)` - Injects ports into service constructors (sugar for `@Inject`)
 
 ## Contributing
