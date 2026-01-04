@@ -50,13 +50,12 @@ This is a NestJS adapter library implementing the Ports & Adapters (Hexagonal Ar
 
 ### Feature Module Pattern
 - Feature modules expose domain services that consume adapters
-- Extend `FeatureModule<ServiceType, TokenType>`
-- Accept adapters via `register({ adapter: AdapterModule })`
+- Extend `PortModule`
+- Accept adapters via `register({ adapter: DynamicModule })`
 - Keep business logic independent of infrastructure
 
-### Type Safety
-- `AdapterModule<TToken>` carries compile-time proof of provided token via `__provides` field
-- Ensures feature modules receive compatible adapters
+### Runtime Safety
+- The library uses decorator metadata to ensure adapters provide the correct port token at runtime
 
 ## Development Commands
 
@@ -115,15 +114,16 @@ Git hooks run automatically via `simple-git-hooks`:
 ## Implementation Reference
 
 The complete implementation specification lives in `spec/spec.md`, which includes:
-- Detailed API design for `Adapter`, `FeatureModule`, and `AdapterModule<TToken>`
+- Detailed API design for `@Adapter` decorator, `AdapterBase`, and `PortModule`
 - Example implementations for S3 storage and HTTP currency rates adapters
 - Testing patterns for mocking adapters
 - Best practices and common pitfalls
 
-Key implementation files (to be created):
-- `src/types.ts` - `AdapterModule<TToken>` type definition
-- `src/adapter.base.ts` - `Adapter` base class with `forToken()` helper
-- `src/feature-module.base.ts` - `FeatureModule` base class
+Key implementation files:
+- `src/core/types.ts` - Type definitions including `AdapterConfig`
+- `src/core/adapter.base.ts` - `AdapterBase` class for building adapters
+- `src/core/port-module.base.ts` - `PortModule` base class for feature modules
+- `src/core/decorators.ts` - `@Adapter` and `@InjectPort` decorators
 - `src/index.ts` - Public API exports
 
 ## Design Principles

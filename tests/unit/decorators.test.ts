@@ -8,7 +8,7 @@ import {
 import { MockApiService, MockStorageService } from '../fixtures/test-services'
 import { TEST_API_TOKEN, TEST_STORAGE_TOKEN } from '../fixtures/test-tokens'
 
-describe('@Port decorator', () => {
+describe('@Adapter decorator', () => {
 	it('should store token metadata', () => {
 		@Adapter({
 			portToken: TEST_STORAGE_TOKEN,

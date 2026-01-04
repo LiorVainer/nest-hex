@@ -18,7 +18,6 @@ describe('Adapter.register()', () => {
 		expect(module.module).toBe(TestAdapter)
 		expect(module.providers).toBeDefined()
 		expect(module.exports).toBeDefined()
-		expect(module.__provides).toBe(TEST_STORAGE_TOKEN)
 	})
 
 	it('should include implementation class as a provider', () => {
@@ -132,6 +131,5 @@ describe('Adapter.register()', () => {
 		const module = TestAdapter.register(undefined)
 
 		expect(module).toBeDefined()
-		expect(module.__provides).toBe(TEST_STORAGE_TOKEN)
 	})
 })

@@ -1,12 +1,11 @@
 import 'reflect-metadata'
-import type { Provider, Type } from '@nestjs/common'
+import type { DynamicModule, Provider, Type } from '@nestjs/common'
 import {
 	ADAPTER_IMPORTS_METADATA,
 	ADAPTER_PROVIDERS_METADATA,
 	PORT_IMPLEMENTATION_METADATA,
 	PORT_TOKEN_METADATA,
 } from './constants'
-import type { AdapterModule } from './types'
 
 /**
  * Abstract base class for building NestJS adapter modules following the Ports & Adapters pattern.
@@ -46,7 +45,7 @@ import type { AdapterModule } from './types'
  * }
  * ```
  */
-export class AdapterBase<TOptions> {
+export class AdapterBase<TOptions = unknown> {
 	/**
 	 * Optional hook to import other NestJS modules.
 	 * Override this method to add module dependencies based on options.
@@ -74,17 +73,17 @@ export class AdapterBase<TOptions> {
 	 * Creates a dynamic module with the adapter's port token and implementation.
 	 *
 	 * @param options - The adapter configuration options
-	 * @returns An AdapterModule with compile-time token proof
+	 * @returns A DynamicModule
 	 * @throws Error if @Adapter decorator is missing or incomplete
 	 */
-	static register<TToken, TOptions>(
+	static register<TOptions>(
 		this: new () => AdapterBase<TOptions>,
 		options: TOptions,
-	): AdapterModule<TToken> {
+	): DynamicModule {
 		const instance = new this()
 
 		// Read metadata from @Adapter decorator
-		const token = Reflect.getMetadata(PORT_TOKEN_METADATA, this) as TToken
+		const token = Reflect.getMetadata(PORT_TOKEN_METADATA, this) as unknown
 		const implementation = Reflect.getMetadata(
 			PORT_IMPLEMENTATION_METADATA,
 			this,
@@ -116,7 +115,6 @@ export class AdapterBase<TOptions> {
 				...instance.extraProviders(options),
 			],
 			exports: [token as never],
-			__provides: token,
 		}
 	}
 
@@ -125,7 +123,7 @@ export class AdapterBase<TOptions> {
 	 * Creates a dynamic module where options are resolved via DI.
 	 *
 	 * @param options - Async configuration with factory, imports, and inject
-	 * @returns An AdapterModule with compile-time token proof
+	 * @returns A DynamicModule
 	 * @throws Error if @Adapter decorator is missing or incomplete
 	 *
 	 * @example
@@ -137,18 +135,18 @@ export class AdapterBase<TOptions> {
 	 * })
 	 * ```
 	 */
-	static registerAsync<TToken, TOptions>(
+	static registerAsync<TOptions>(
 		this: new () => AdapterBase<TOptions>,
 		options: {
 			imports?: unknown[]
 			inject?: unknown[]
 			useFactory: (...args: unknown[]) => TOptions | Promise<TOptions>
 		},
-	): AdapterModule<TToken> {
+	): DynamicModule {
 		const instance = new this()
 
 		// Read metadata from @Adapter decorator
-		const token = Reflect.getMetadata(PORT_TOKEN_METADATA, this) as TToken
+		const token = Reflect.getMetadata(PORT_TOKEN_METADATA, this) as unknown
 		const implementation = Reflect.getMetadata(
 			PORT_IMPLEMENTATION_METADATA,
 			this,
@@ -184,7 +182,6 @@ export class AdapterBase<TOptions> {
 				...instance.extraProviders({} as TOptions),
 			],
 			exports: [token as never],
-			__provides: token,
 		}
 	}
 }

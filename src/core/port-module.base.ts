@@ -1,6 +1,5 @@
 import 'reflect-metadata'
 import { type DynamicModule, Module } from '@nestjs/common'
-import type { AdapterModule } from './types'
 
 /**
  * Base class for building port modules following the Ports & Adapters pattern.
@@ -38,11 +37,9 @@ export class PortModule {
 	 * @param config.adapter - An adapter module that provides a port implementation
 	 * @returns A dynamic module that imports the adapter
 	 */
-	static register<TToken>(config: {
-		adapter?: AdapterModule<TToken>
-	}): DynamicModule {
+	static register(config: { adapter?: DynamicModule }): DynamicModule {
 		return {
-			module: this,
+			module: PortModule,
 			imports: config.adapter ? [config.adapter] : [],
 		}
 	}

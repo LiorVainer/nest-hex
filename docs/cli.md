@@ -394,7 +394,7 @@ Templates have access to these variables:
 {{name}}              - Adapter name (e.g., "S3")
 {{adapterName}}       - Adapter class name (e.g., "S3Adapter")
 {{serviceName}}       - Service class name (e.g., "S3Service")
-{{optionsInterface}}  - Options interface name (e.g., "S3Options")
+{{optionsInterface}}  - Options interface name (e.g., "S3ConfigOptions")
 {{portToken}}         - Port token constant (e.g., "OBJECT_STORAGE_PORT")
 ```
 
@@ -476,24 +476,24 @@ src/adapters/s3/
 import { Adapter } from 'nest-hex'
 import { OBJECT_STORAGE_PORT } from '../../ports/object-storage'
 import { S3Service } from './s3.service'
-import type { S3Options } from './s3.types'
+import type { S3ConfigOptions } from './s3.types'
 
 @Adapter({
   portToken: OBJECT_STORAGE_PORT,
   implementation: S3Service
 })
-export class S3Adapter extends AdapterBase<S3Options> {}
+export class S3Adapter extends AdapterBase<S3ConfigOptions> {}
 ```
 
 **s3.service.ts:**
 ```typescript
 import { Injectable } from '@nestjs/common'
 import { ObjectStoragePort } from '../../ports/object-storage'
-import type { S3Options } from './s3.types'
+import type { S3ConfigOptions } from './s3.types'
 
 @Injectable()
 export class S3Service implements ObjectStoragePort {
-  constructor(private options: S3Options) {}
+  constructor(private options: S3ConfigOptions) {}
 
   // Implement port methods here
 }

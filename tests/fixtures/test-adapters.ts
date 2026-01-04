@@ -15,7 +15,7 @@ import {
  * These adapters use the @Adapter decorator pattern and can be used in tests.
  */
 
-export type TestStorageOptions = {
+export type TestStorageConfigOptions = {
 	prefix?: string
 }
 
@@ -23,9 +23,9 @@ export type TestStorageOptions = {
 	portToken: TEST_STORAGE_TOKEN,
 	implementation: MockStorageService,
 })
-export class TestStorageAdapter extends AdapterBase<TestStorageOptions> {}
+export class TestStorageAdapter extends AdapterBase<TestStorageConfigOptions> {}
 
-export type TestApiOptions = {
+export type TestApiConfigOptions = {
 	baseUrl: string
 	timeout?: number
 }
@@ -34,9 +34,9 @@ export type TestApiOptions = {
 	portToken: TEST_API_TOKEN,
 	implementation: MockApiService,
 })
-export class TestApiAdapter extends AdapterBase<TestApiOptions> {}
+export class TestApiAdapter extends AdapterBase<TestApiConfigOptions> {}
 
-export type TestCacheOptions = {
+export type TestCacheConfigOptions = {
 	defaultTtl: number
 }
 
@@ -44,4 +44,4 @@ export type TestCacheOptions = {
 	portToken: TEST_CACHE_TOKEN,
 	implementation: MockCacheService,
 })
-export class TestCacheAdapter extends AdapterBase<TestCacheOptions> {}
+export class TestCacheAdapter extends AdapterBase<TestCacheConfigOptions> {}

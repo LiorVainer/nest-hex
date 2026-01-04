@@ -20,7 +20,6 @@ describe('Adapter.registerAsync()', () => {
 		expect(module.module).toBe(TestAdapter)
 		expect(module.providers).toBeDefined()
 		expect(module.exports).toBeDefined()
-		expect(module.__provides).toBe(TEST_STORAGE_TOKEN)
 	})
 
 	it('should include implementation class as a provider', () => {
@@ -163,6 +162,5 @@ describe('Adapter.registerAsync()', () => {
 		})
 
 		expect(module).toBeDefined()
-		expect(module.__provides).toBe(TEST_STORAGE_TOKEN)
 	})
 })

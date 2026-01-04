@@ -16,12 +16,11 @@ bun run type-check:examples
 
 ## Organization
 
-### Basic Examples (`01-03-*.ts`)
+### Basic Examples (`02-03-*.ts`)
 
 Foundational examples showing individual APIs in isolation:
 
-- `01-adapter-module-type.ts` - Understanding the `AdapterModule<TToken>` type
-- `02-decorator-basics.ts` - Using `@AdapterToken` and `@AdapterImpl` decorators
+- `02-decorator-basics.ts` - Using `@Adapter` decorator
 - `03-inject-port.ts` - Injecting ports with `@InjectPort` decorator
 
 ### Complete Scenarios

@@ -11,7 +11,7 @@ import { CURRENCY_RATES_TOKEN } from '../../currency-rates.token'
 import { HttpRatesService } from './http-rates.service'
 import type {
 	HttpRatesAdapterConfig,
-	HttpRatesOptions,
+	HttpRatesConfigOptions,
 } from './http-rates.types'
 
 /**
@@ -46,13 +46,13 @@ import type {
 	portToken: CURRENCY_RATES_TOKEN,
 	implementation: HttpRatesService,
 })
-class HttpRatesAdapter extends AdapterBase<HttpRatesOptions> {
+class HttpRatesAdapter extends AdapterBase<HttpRatesConfigOptions> {
 	/**
 	 * Optional: Override imports() to add HttpModule dependency.
 	 *
 	 * In a real implementation, you would import HttpModule here:
 	 */
-	protected override imports(_options: HttpRatesOptions): unknown[] {
+	protected override imports(_options: HttpRatesConfigOptions): unknown[] {
 		// Example: Import HttpModule for making HTTP requests
 		// return [HttpModule];
 
@@ -65,7 +65,7 @@ class HttpRatesAdapter extends AdapterBase<HttpRatesOptions> {
 	 *
 	 * Example: Add a logger or retry handler:
 	 */
-	protected override extraProviders(_options: HttpRatesOptions): Provider[] {
+	protected override extraProviders(_options: HttpRatesConfigOptions): Provider[] {
 		// Example: Add a custom HTTP client with retry logic
 		// return [
 		//   {
@@ -91,12 +91,11 @@ export default HttpRatesAdapter
  *   providers: [
  *     HttpRatesService,  // The HTTP-based implementation
  *     {
- *       provide: CURRENCY_RATES_PROVIDER,
+ *       provide: CURRENCY_RATES_TOKEN,
  *       useExisting: HttpRatesService
  *     }
  *   ],
- *   exports: [CURRENCY_RATES_PROVIDER],
- *   __provides: CURRENCY_RATES_PROVIDER
+ *   exports: [CURRENCY_RATES_TOKEN]
  * }
  */
 
@@ -110,7 +109,7 @@ export default HttpRatesAdapter
  * 3. **CompositeRatesAdapter** - Combine multiple sources with fallback
  * 4. **WebSocketRatesAdapter** - Real-time streaming rates
  *
- * All implement CurrencyRatesPort and provide CURRENCY_RATES_PROVIDER,
+ * All implement CurrencyRatesPort and provide CURRENCY_RATES_TOKEN,
  * making them fully interchangeable!
  */
 

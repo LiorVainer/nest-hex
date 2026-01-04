@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common'
 {{#if portInterfaceName}}
 import type { {{portInterfaceName}} } from '{{portImportPath}}'
 {{/if}}
-import type { {{namePascal}}Options } from './{{nameKebab}}.types'
+import type { {{namePascal}}ConfigOptions } from './{{nameKebab}}.types'
 
 @Injectable()
 export class {{namePascal}}Service{{#if portInterfaceName}} implements {{portInterfaceName}}{{/if}} {
-	constructor(private readonly options: {{namePascal}}Options) {}
+	constructor(private readonly options: {{namePascal}}ConfigOptions) {}
 }

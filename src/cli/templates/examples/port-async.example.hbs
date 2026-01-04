@@ -16,10 +16,10 @@ import { {{namePascal}}Module } from './{{nameKebab}}.module'
 import { {{namePascal}}Service } from './{{nameKebab}}.service'
 {{#if adapterName}}
 import { {{adapterName}}Adapter } from '{{adapterImportPath}}'
-import type { {{adapterName}}Options } from '{{adapterTypesImportPath}}'
+import type { {{adapterName}}ConfigOptions } from '{{adapterTypesImportPath}}'
 {{else}}
 // import { YourAdapter } from './adapters/your-adapter/your-adapter.adapter'
-// import type { YourAdapterOptions } from './adapters/your-adapter/your-adapter.types'
+// import type { YourAdapterConfigOptions } from './adapters/your-adapter/your-adapter.types'
 {{/if}}
 
 /**
@@ -52,7 +52,7 @@ export class {{namePascal}}Controller {
 			adapter: {{#if adapterName}}{{adapterName}}Adapter{{else}}YourAdapter{{/if}}.registerAsync({
 				imports: [ConfigModule],
 				inject: [ConfigService],
-				useFactory: (config: ConfigService){{#if adapterName}}: {{adapterName}}Options{{/if}} => ({
+				useFactory: (config: ConfigService){{#if adapterName}}: {{adapterName}}ConfigOptions{{/if}} => ({
 					// Load configuration from environment variables
 					// Example:
 					// apiKey: config.get<string>('{{nameScreamingSnake}}_API_KEY', ''),

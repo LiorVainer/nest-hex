@@ -5,7 +5,7 @@
  * It uses the decorator-driven API for minimal boilerplate.
  *
  * Key Points:
- * - Extends Adapter<S3Options>
+ * - Extends AdapterBase<S3ConfigOptions>
  * - Uses @Port to declare the token and implementation
  * - Provides compile-time type safety through static methods
  */
@@ -13,7 +13,7 @@
 import { Adapter, AdapterBase } from '../../../../src'
 import { OBJECT_STORAGE_TOKEN } from '../../object-storage.token'
 import { S3ObjectStorageService } from './s3.service'
-import type { S3Options } from './s3.types'
+import type { S3ConfigOptions } from './s3.types'
 
 /**
  * S3 adapter for object storage.
@@ -50,7 +50,7 @@ import type { S3Options } from './s3.types'
 	portToken: OBJECT_STORAGE_TOKEN,
 	implementation: S3ObjectStorageService,
 })
-export class S3Adapter extends AdapterBase<S3Options> {
+export class S3Adapter extends AdapterBase<S3ConfigOptions> {
 	// No additional code needed!
 	// The decorators and base class handle everything:
 	// - Token registration
@@ -62,7 +62,7 @@ export class S3Adapter extends AdapterBase<S3Options> {
 	 *
 	 * Uncomment this if your S3 service needs HttpModule or other modules:
 	 */
-	// protected override imports(options: S3Options): unknown[] {
+	// protected override imports(options: S3ConfigOptions): unknown[] {
 	//   return [HttpModule];
 	// }
 	/**
@@ -70,7 +70,7 @@ export class S3Adapter extends AdapterBase<S3Options> {
 	 *
 	 * Uncomment this if you need additional providers:
 	 */
-	// protected override extraProviders(options: S3Options): Provider[] {
+	// protected override extraProviders(options: S3ConfigOptions): Provider[] {
 	//   return [
 	//     {
 	//       provide: 'S3_CLIENT_FACTORY',
@@ -85,7 +85,7 @@ export default S3Adapter
 /**
  * What This Adapter Provides:
  *
- * When you call S3Adapter.register(options), you get an AdapterModule that:
+ * When you call S3Adapter.register(options), you get a DynamicModule:
  *
  * {
  *   module: S3Adapter,
@@ -93,15 +93,14 @@ export default S3Adapter
  *   providers: [
  *     S3ObjectStorageService,  // The implementation
  *     {
- *       provide: OBJECT_STORAGE_PROVIDER,  // The port token
+ *       provide: OBJECT_STORAGE_TOKEN,  // The port token
  *       useExisting: S3ObjectStorageService  // Alias to implementation
  *     }
  *   ],
- *   exports: [OBJECT_STORAGE_PROVIDER],  // Export the token
- *   __provides: OBJECT_STORAGE_PROVIDER  // Compile-time type proof
+ *   exports: [OBJECT_STORAGE_TOKEN]  // Export the token
  * }
  *
- * Any service that injects OBJECT_STORAGE_PROVIDER will receive an instance
+ * Any service that injects OBJECT_STORAGE_TOKEN will receive an instance
  * of S3ObjectStorageService.
  */
 
@@ -116,6 +115,6 @@ export default S3Adapter
  * - FilesystemAdapter - Uses local filesystem (for development)
  *
  * All adapters implement the same ObjectStoragePort interface and
- * provide the same OBJECT_STORAGE_PROVIDER token, making them fully
+ * provide the same OBJECT_STORAGE_TOKEN token, making them fully
  * interchangeable at the app module level.
  */

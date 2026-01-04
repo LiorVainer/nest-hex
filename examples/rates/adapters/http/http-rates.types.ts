@@ -11,7 +11,7 @@ import type { CurrencyRatesPort } from '../../currency-rates.port'
 /**
  * Configuration options for the HTTP rates adapter.
  */
-export interface HttpRatesOptions {
+export interface HttpRatesConfigOptions {
 	/**
 	 * Base URL of the exchange rates API.
 	 *

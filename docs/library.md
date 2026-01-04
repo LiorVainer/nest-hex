@@ -10,7 +10,6 @@
   - [Adapter Class](#adapter-class)
   - [@InjectPort Decorator](#injectport-decorator)
   - [PortModule Class](#portmodule-class)
-  - [AdapterModule Type](#adaptermodule-type)
 - [Getting Started](#getting-started)
 - [Advanced Usage](#advanced-usage)
   - [Adapters with Dependencies](#adapters-with-dependencies)
@@ -67,7 +66,7 @@ class S3Service implements ObjectStoragePort {
   portToken: OBJECT_STORAGE_PORT,
   implementation: S3Service
 })
-export class S3Adapter extends AdapterBase<S3Options> {}
+export class S3Adapter extends AdapterBase<S3ConfigOptions> {}
 ```
 
 ### Service (Domain Logic)
@@ -316,7 +315,7 @@ function Adapter(config: {
   portToken: OBJECT_STORAGE_PORT,
   implementation: S3ObjectStorageService
 })
-export class S3Adapter extends AdapterBase<S3Options> {}
+export class S3Adapter extends AdapterBase<S3ConfigOptions> {}
 ```
 
 **Example - Adapter with Dependencies:**
@@ -329,7 +328,7 @@ export class S3Adapter extends AdapterBase<S3Options> {}
     { provide: 'HTTP_CONFIG', useValue: { timeout: 5000 } }
   ]
 })
-export class AxiosAdapter extends AdapterBase<AxiosOptions> {}
+export class AxiosAdapter extends AdapterBase<AxiosConfigOptions> {}
 ```
 
 ---
@@ -343,7 +342,7 @@ The `Adapter` base class provides `register()` and `registerAsync()` methods for
 
 **Methods:**
 
-#### `register(options: TOptions): AdapterModule<TToken>`
+#### `register(options: TOptions): DynamicModule`
 
 Creates a dynamic module with synchronous configuration.
 
@@ -359,16 +358,15 @@ S3Adapter.register({
 })
 ```
 
-**Returns:** An `AdapterModule<TToken>` with:
+**Returns:** A `DynamicModule` with:
 - `module`: The adapter class
 - `imports`: Modules from decorator + any additional imports
 - `providers`: Implementation + port token alias + decorator providers
 - `exports`: The port token
-- `__provides`: Compile-time token proof
 
 ---
 
-#### `registerAsync(options): AdapterModule<TToken>`
+#### `registerAsync(options): DynamicModule`
 
 Creates a dynamic module with asynchronous configuration using dependency injection.
 
@@ -453,7 +451,7 @@ The `PortModule` base class provides a `register()` method that accepts any comp
 **Parameters:**
 ```typescript
 {
-  adapter: AdapterModule<TToken>
+  adapter: DynamicModule
 }
 ```
 
@@ -468,37 +466,7 @@ FileModule.register({
 })
 ```
 
-**Type Safety:** TypeScript ensures that the adapter provides the correct port token that the service expects.
-
----
-
-### AdapterModule Type
-
-The `AdapterModule<TToken>` type carries compile-time proof of which token an adapter provides.
-
-**Definition:**
-```typescript
-export interface AdapterModule<TToken> extends DynamicModule {
-  __provides: TToken
-}
-```
-
-**Purpose:**
-- Enables compile-time verification that adapters match services
-- Prevents passing incompatible adapters to port modules
-
-**Example:**
-```typescript
-// ✅ Type-safe: S3Adapter provides OBJECT_STORAGE_PORT
-FileModule.register({
-  adapter: S3Adapter.register({ bucket: 'files' })
-})
-
-// ❌ Compile error: EmailAdapter doesn't provide OBJECT_STORAGE_PORT
-FileModule.register({
-  adapter: EmailAdapter.register({ apiKey: 'key' })
-})
-```
+**Runtime Safety:** The library uses the `@Adapter` decorator metadata to ensure adapters provide the correct port token at runtime.
 
 ---
 
@@ -530,7 +498,7 @@ import { Injectable } from '@nestjs/common'
 import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3'
 import { ObjectStoragePort } from '../../ports/object-storage.port'
 
-export interface S3Options {
+export interface S3ConfigOptions {
   bucket: string
   region: string
 }
@@ -539,7 +507,7 @@ export interface S3Options {
 export class S3Service implements ObjectStoragePort {
   private client: S3Client
 
-  constructor(private options: S3Options) {
+  constructor(private options: S3ConfigOptions) {
     this.client = new S3Client({ region: options.region })
   }
 
@@ -570,13 +538,13 @@ export class S3Service implements ObjectStoragePort {
 // src/adapters/s3/s3.adapter.ts
 import { Adapter } from 'nest-hex'
 import { OBJECT_STORAGE_PORT } from '../../ports/object-storage.port'
-import { S3Service, S3Options } from './s3.service'
+import { S3Service, S3ConfigOptions } from './s3.service'
 
 @Adapter({
   portToken: OBJECT_STORAGE_PORT,
   implementation: S3Service
 })
-export class S3Adapter extends AdapterBase<S3Options> {}
+export class S3Adapter extends AdapterBase<S3ConfigOptions> {}
 ```
 
 ### 3. Create a Domain Service
@@ -663,7 +631,7 @@ import { AxiosHttpClient } from './axios.service'
     { provide: 'RETRY_CONFIG', useValue: { maxRetries: 3 } }
   ]
 })
-export class AxiosAdapter extends AdapterBase<AxiosOptions> {}
+export class AxiosAdapter extends AdapterBase<AxiosConfigOptions> {}
 ```
 
 ### Async Configuration
@@ -840,7 +808,7 @@ import { Port } from 'nest-hex'
   token: OBJECT_STORAGE_PORT,
   implementation: S3Service
 })
-export class S3Adapter extends AdapterBase<S3Options> {}
+export class S3Adapter extends AdapterBase<S3ConfigOptions> {}
 ```
 
 **After:**
@@ -851,7 +819,7 @@ import { Adapter } from 'nest-hex'
   portToken: OBJECT_STORAGE_PORT,
   implementation: S3Service
 })
-export class S3Adapter extends AdapterBase<S3Options> {}
+export class S3Adapter extends AdapterBase<S3ConfigOptions> {}
 ```
 
 **Changes:**

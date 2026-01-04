@@ -15,7 +15,7 @@ import { Injectable } from '@nestjs/common'
 import { Adapter, AdapterBase } from '../src'
 
 // Step 1: Define a port token
-const EMAIL_PROVIDER = Symbol('EMAIL_PROVIDER')
+const EMAIL_PORT = Symbol('EMAIL_PORT')
 
 // Step 2: Define the port interface (what the domain needs)
 interface EmailPort {
@@ -46,7 +46,7 @@ class SendGridService implements EmailPort {
 
 // Step 5: Create the adapter using @Adapter decorator
 @Adapter({
-	portToken: EMAIL_PROVIDER, // Declares: "I provide EMAIL_PROVIDER"
+	portToken: EMAIL_PORT, // Declares: "I provide EMAIL_PORT"
 	implementation: SendGridService, // Declares: "I use SendGridService as implementation"
 })
 class SendGridAdapter extends AdapterBase<SendGridOptions> {
@@ -65,16 +65,16 @@ console.log('SendGrid adapter module:', sendGridModule)
 /**
  * What Happens Behind the Scenes:
  *
- * 1. @Adapter stores both EMAIL_PROVIDER (portToken) and SendGridService (implementation) in class metadata
+ * 1. @Adapter stores both EMAIL_PORT (portToken) and SendGridService (implementation) in class metadata
  * 2. AdapterBase.register() reads this metadata and creates:
  *    {
  *      module: SendGridAdapter,
  *      providers: [
  *        SendGridService,  // The implementation
- *        { provide: EMAIL_PROVIDER, useExisting: SendGridService }  // Token alias
+ *        { provide: EMAIL_PORT, useExisting: SendGridService }  // Token alias
  *      ],
- *      exports: [EMAIL_PROVIDER],
- *      __provides: EMAIL_PROVIDER  // Compile-time type proof
+ *      exports: [EMAIL_PORT],
+ *      __provides: EMAIL_PORT  // Compile-time type proof
  *    }
  */
 
@@ -106,7 +106,7 @@ class SmtpService implements EmailPort {
 }
 
 @Adapter({
-	portToken: EMAIL_PROVIDER, // Same token, different implementation!
+	portToken: EMAIL_PORT, // Same token, different implementation!
 	implementation: SmtpService,
 })
 class SmtpAdapter extends AdapterBase<SmtpOptions> {}
@@ -127,7 +127,7 @@ console.log('SMTP adapter module:', smtpModule)
  * in every register() call. The @Adapter decorator eliminates this repetition:
  *
  * ❌ Without decorator (verbose):
- * AdapterBase.register({ portToken: EMAIL_PROVIDER, impl: SendGridService, options: {...} })
+ * AdapterBase.register({ portToken: EMAIL_PORT, impl: SendGridService, options: {...} })
  *
  * ✅ With @Adapter decorator (concise, declarative):
  * S	endGridAdapter.register({ apiKey: '...', fromEmail: '...' })

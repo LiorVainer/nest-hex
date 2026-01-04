@@ -10,7 +10,7 @@
  *
  * These options control how the adapter connects to and uses AWS S3.
  */
-export interface S3Options {
+export interface S3ConfigOptions {
 	/**
 	 * AWS S3 bucket name where objects will be stored.
 	 *

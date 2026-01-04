@@ -7,7 +7,7 @@
  *
  * Key Points:
  * - Implements ObjectStoragePort interface
- * - Receives S3Options via constructor injection
+ * - Receives S3ConfigOptions via constructor injection
  * - Contains all AWS S3 API integration logic
  * - Translates S3 responses to domain types
  */
@@ -18,7 +18,7 @@ import type {
 	ObjectStoragePort,
 	UploadResult,
 } from '../../object-storage.port'
-import type { S3Options } from './s3.types'
+import type { S3ConfigOptions } from './s3.types'
 
 /**
  * S3 implementation of the ObjectStoragePort port.
@@ -31,7 +31,7 @@ import type { S3Options } from './s3.types'
  */
 @Injectable()
 export class S3ObjectStorageService implements ObjectStoragePort {
-	constructor(private readonly options: S3Options) {
+	constructor(private readonly options: S3ConfigOptions) {
 		console.log(
 			`S3ObjectStorageService initialized: bucket=${options.bucket}, region=${options.region}`,
 		)

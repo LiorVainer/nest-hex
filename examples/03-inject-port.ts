@@ -15,8 +15,8 @@ import { Injectable } from '@nestjs/common'
 import { InjectPort } from '../src'
 
 // Step 1: Define port tokens
-const LOGGER_PROVIDER = Symbol('LOGGER_PROVIDER')
-const CACHE_PROVIDER = Symbol('CACHE_PROVIDER')
+const LOGGER_PORT = Symbol('LOGGER_PORT')
+const CACHE_PORT = Symbol('CACHE_PORT')
 
 // Step 2: Define port interfaces
 interface LoggerPort {
@@ -38,11 +38,11 @@ class _UserService {
 
 	constructor(
 		// Inject the logger port
-		@InjectPort(LOGGER_PROVIDER)
+		@InjectPort(LOGGER_PORT)
 		logger: LoggerPort,
 
 		// Inject the cache port
-		@InjectPort(CACHE_PROVIDER)
+		@InjectPort(CACHE_PORT)
 		cache: CachePort,
 	) {
 		this.logger = logger
@@ -90,13 +90,13 @@ class _UserService {
  * @InjectPort is semantically clearer:
  *
  * ✅ Clear intent:
- * @InjectPort(LOGGER_PROVIDER)
+ * @InjectPort(LOGGER_PORT)
  * private readonly logger: LoggerPort
  *
  * vs.
  *
  * ❌ Less clear:
- * @Inject(LOGGER_PROVIDER)
+ * @Inject(LOGGER_PORT)
  * private readonly logger: LoggerPort
  *
  * Both work the same way, but @InjectPort signals "this is a port from Hexagonal Architecture"
@@ -113,10 +113,10 @@ class _OrderService {
 	private readonly cache: CachePort
 
 	constructor(
-		@InjectPort(LOGGER_PROVIDER)
+		@InjectPort(LOGGER_PORT)
 		logger: LoggerPort,
 
-		@InjectPort(CACHE_PROVIDER)
+		@InjectPort(CACHE_PORT)
 		cache: CachePort,
 	) {
 		this.logger = logger

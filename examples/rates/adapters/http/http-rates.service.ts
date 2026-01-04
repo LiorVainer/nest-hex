@@ -11,7 +11,7 @@ import type {
 	ExchangeRate,
 	RatesResponse,
 } from '../../currency-rates.port'
-import type { HttpRatesOptions } from './http-rates.types'
+import type { HttpRatesConfigOptions } from './http-rates.types'
 
 /**
  * HTTP implementation of the CurrencyRatesPort port.
@@ -26,7 +26,7 @@ export class HttpRatesService implements CurrencyRatesPort {
 	private readonly timeoutMs: number
 	private readonly maxRetries: number
 
-	constructor(options: HttpRatesOptions) {
+	constructor(options: HttpRatesConfigOptions) {
 		this.apiUrl = options.apiUrl
 		this.apiKey = options.apiKey
 		this.timeoutMs = options.timeoutMs ?? 5000
@@ -169,7 +169,7 @@ export class HttpRatesService implements CurrencyRatesPort {
  *
  *    constructor(
  *      private readonly httpService: HttpService,
- *      options: HttpRatesOptions
+ *      options: HttpRatesConfigOptions
  *    ) {}
  *
  *    async getRate(from: string, to: string) {
