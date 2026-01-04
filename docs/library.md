@@ -101,7 +101,7 @@ import { PortModule } from 'nest-hex'
 import { FileService } from './file.service'
 
 @Module({})
-export class FileModule extends PortModule<typeof FileService> {}
+export class FileModule extends PortModule {}
 
 // Usage in app module:
 @Module({
@@ -460,7 +460,7 @@ The `PortModule` base class provides a `register()` method that accepts any comp
 **Example:**
 ```typescript
 @Module({})
-export class FileModule extends PortModule<typeof FileService> {}
+export class FileModule extends PortModule {}
 
 // Usage:
 FileModule.register({
@@ -617,7 +617,7 @@ import { PortModule } from 'nest-hex'
 import { FileService } from '../services/file.service'
 
 @Module({})
-export class FileModule extends PortModule<typeof FileService> {}
+export class FileModule extends PortModule {}
 ```
 
 ### 5. Wire It All Together

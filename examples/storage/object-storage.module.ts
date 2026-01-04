@@ -5,15 +5,14 @@
  * It extends PortModule to accept any adapter that provides OBJECT_STORAGE_PROVIDER.
  *
  * Key Points:
- * - Extends PortModule<ObjectStorageToken>
+ * - Extends PortModule
  * - Uses register({ adapter }) to accept an adapter module
- * - Type-safe: TypeScript ensures adapter provides ObjectStorageToken
+ * - Type-safe: TypeScript infers token type from the adapter
  */
 
 import { Module } from '@nestjs/common'
 import { PortModule } from '../../src'
 import type { ObjectStorageService } from './object-storage.service'
-import type { ObjectStorageToken } from './object-storage.token'
 
 /**
  * Port module for object storage.
@@ -39,7 +38,7 @@ import type { ObjectStorageToken } from './object-storage.token'
  * ```
  */
 @Module({})
-export class ObjectStorageModule extends PortModule<ObjectStorageToken> {}
+export class ObjectStorageModule extends PortModule {}
 
 /**
  * What Happens When You Call ObjectStorageModule.register({ adapter })?

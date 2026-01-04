@@ -449,7 +449,7 @@ import { PortModule } from 'nest-hex'
 import { ObjectStorageService } from './object-storage.service'
 
 @Module({})
-export class ObjectStorageModule extends PortModule<typeof ObjectStorageService> {}
+export class ObjectStorageModule extends PortModule {}
 ```
 
 ---
