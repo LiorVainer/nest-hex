@@ -1,1 +1,24 @@
-export interface {{namePascal}}Options {}
+{{#if portTokenName}}
+import type { AdapterConfig } from '{{coreImportPath}}'
+{{#if portInterfaceName}}
+import type { {{portTokenName}}, {{portInterfaceName}} } from '{{portImportPath}}'
+{{else}}
+import type { {{portTokenName}} } from '{{portImportPath}}'
+{{/if}}
+
+{{/if}}
+export interface {{namePascal}}Options {
+	// Example configuration properties (modify as needed):
+	// apiUrl?: string
+	// apiKey?: string
+	// timeout?: number
+	// retries?: number
+}
+{{#if portTokenName}}
+{{#if portInterfaceName}}
+
+export type {{portNamePascal}}Token = typeof {{portTokenName}}
+
+export type {{namePascal}}AdapterConfig = AdapterConfig<{{portNamePascal}}Token, {{portInterfaceName}}>
+{{/if}}
+{{/if}}

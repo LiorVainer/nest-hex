@@ -3,9 +3,9 @@ import { Adapter, AdapterBase } from '{{coreImportPath}}'
 import { {{portTokenName}} } from '{{portImportPath}}'
 {{/if}}
 import { {{namePascal}}Service } from './{{nameKebab}}.service'
-import type { {{namePascal}}Options } from './{{nameKebab}}.types'
+import type { {{namePascal}}Options{{#if portInterfaceName}}, {{namePascal}}AdapterConfig{{/if}} } from './{{nameKebab}}.types'
 
-@Adapter({
+@Adapter{{#if portInterfaceName}}<{{namePascal}}AdapterConfig>{{/if}}({
 	portToken: {{#if portTokenName}}{{portTokenName}}{{else}}{{nameScreamingSnake}}_PORT{{/if}},
 	implementation: {{namePascal}}Service,
 })

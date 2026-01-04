@@ -4,6 +4,10 @@
  * This file defines configuration options for the HTTP-based currency rates adapter.
  */
 
+import type { AdapterConfig } from '../../../../src'
+import type { CURRENCY_RATES_TOKEN } from '../../currency-rates.token'
+import type { CurrencyRatesPort } from '../../currency-rates.port'
+
 /**
  * Configuration options for the HTTP rates adapter.
  */
@@ -74,3 +78,19 @@ export interface HttpRatesOptions {
  *   }
  * }
  */
+
+/**
+ * Type alias for the currency rates port token.
+ */
+export type CurrencyRatesToken = typeof CURRENCY_RATES_TOKEN
+
+/**
+ * Type-safe adapter configuration for HTTP rates adapter.
+ *
+ * This type ensures that the adapter's portToken and implementation
+ * are correctly typed and match the CurrencyRatesPort interface.
+ */
+export type HttpRatesAdapterConfig = AdapterConfig<
+	CurrencyRatesToken,
+	CurrencyRatesPort
+>

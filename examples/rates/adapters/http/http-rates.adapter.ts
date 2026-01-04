@@ -7,9 +7,12 @@
 
 import type { Provider } from '@nestjs/common'
 import { Adapter, AdapterBase } from '../../../../src'
-import { CURRENCY_RATES_PROVIDER } from '../../currency-rates.token'
+import { CURRENCY_RATES_TOKEN } from '../../currency-rates.token'
 import { HttpRatesService } from './http-rates.service'
-import type { HttpRatesOptions } from './http-rates.types'
+import type {
+	HttpRatesAdapterConfig,
+	HttpRatesOptions,
+} from './http-rates.types'
 
 /**
  * HTTP adapter for currency exchange rates.
@@ -39,8 +42,8 @@ import type { HttpRatesOptions } from './http-rates.types'
  * })
  * ```
  */
-@Adapter({
-	portToken: CURRENCY_RATES_PROVIDER,
+@Adapter<HttpRatesAdapterConfig>({
+	portToken: CURRENCY_RATES_TOKEN,
 	implementation: HttpRatesService,
 })
 class HttpRatesAdapter extends AdapterBase<HttpRatesOptions> {

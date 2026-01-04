@@ -19,7 +19,7 @@ export type AdapterModule<TToken> = DynamicModule & {
 	__provides: TToken
 }
 
-export type PortConfig<Token, Port> = {
-	token: Token
-	port: Port
+export type AdapterConfig<TToken, TImplementation> = {
+	portToken: TToken
+	implementation: TImplementation
 }

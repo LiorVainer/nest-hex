@@ -7,7 +7,7 @@ import {
 	PORT_IMPLEMENTATION_METADATA,
 	PORT_TOKEN_METADATA,
 } from './constants'
-import type { PortConfig } from './types.ts'
+import type { AdapterConfig } from './types.ts'
 
 /**
  * Declares the adapter configuration (port token, implementation, imports, and extra providers).
@@ -44,9 +44,9 @@ import type { PortConfig } from './types.ts'
  * class AxiosAdapter extends AdapterBase<AxiosOptions> {}
  * ```
  */
-export function Adapter<C extends PortConfig<any, any>>(config: {
-	portToken: C['token']
-	implementation: Type<C['port']>
+export function Adapter<Config extends AdapterConfig<any, any>>(config: {
+	portToken: Config['portToken']
+	implementation: Type<Config['implementation']>
 	imports?: Array<Type<any> | DynamicModule | Promise<DynamicModule>>
 	providers?: Provider[]
 }): ClassDecorator {

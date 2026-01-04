@@ -8,7 +8,7 @@
 import { Injectable } from '@nestjs/common'
 import { InjectPort } from '../../src'
 import type { CurrencyRatesPort, ExchangeRate } from './currency-rates.port'
-import { CURRENCY_RATES_PROVIDER } from './currency-rates.token'
+import { CURRENCY_RATES_TOKEN } from './currency-rates.token'
 
 /**
  * Invoice line item for multi-currency calculations.
@@ -30,7 +30,7 @@ export class CurrencyRatesService {
 	private readonly ratesPort: CurrencyRatesPort
 
 	constructor(
-		@InjectPort(CURRENCY_RATES_PROVIDER)
+		@InjectPort(CURRENCY_RATES_TOKEN)
 		ratesPort: CurrencyRatesPort,
 	) {
 		this.ratesPort = ratesPort

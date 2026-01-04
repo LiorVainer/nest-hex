@@ -58,15 +58,27 @@ export interface StoragePort {
 ### 2. Create an Adapter (Infrastructure Implementation)
 
 ```typescript
-// s3.adapter.ts
-import { Injectable } from '@nestjs/common'
-import { Adapter } from 'nest-hex'
-import { STORAGE_PORT, type StoragePort } from './storage.port'
+// s3.types.ts - Configuration types
+import type { AdapterConfig } from 'nest-hex'
+import type { STORAGE_PORT, StoragePort } from './storage.port'
 
-// Implementation service
+export interface S3Options {
+  bucket: string
+  region: string
+}
+
+export type StorageToken = typeof STORAGE_PORT
+
+export type S3AdapterConfig = AdapterConfig<StorageToken, StoragePort>
+
+// s3.service.ts - Implementation service
+import { Injectable } from '@nestjs/common'
+import type { StoragePort } from './storage.port'
+import type { S3Options } from './s3.types'
+
 @Injectable()
-class S3Service implements StoragePort {
-  constructor(private options: { bucket: string; region: string }) {}
+export class S3Service implements StoragePort {
+  constructor(private options: S3Options) {}
 
   async upload(key: string, data: Buffer): Promise<string> {
     // AWS S3 upload logic here
@@ -79,12 +91,18 @@ class S3Service implements StoragePort {
   }
 }
 
-// Adapter module - single decorator declares everything!
-@Adapter({
+// s3.adapter.ts - Adapter module
+import { Adapter, AdapterBase } from 'nest-hex'
+import { STORAGE_PORT } from './storage.port'
+import { S3Service } from './s3.service'
+import type { S3AdapterConfig, S3Options } from './s3.types'
+
+// Single decorator with type safety!
+@Adapter<S3AdapterConfig>({
   portToken: STORAGE_PORT,
   implementation: S3Service
 })
-export class S3Adapter extends AdapterBase<{ bucket: string; region: string }> {}
+export class S3Adapter extends AdapterBase<S3Options> {}
 ```
 
 ### 3. Create a Domain Service
@@ -188,7 +206,12 @@ export class S3StorageModule {
 ### After (With nest-hex)
 
 ```typescript
-@Adapter({
+// s3.types.ts
+export type StorageToken = typeof STORAGE_PORT
+export type S3AdapterConfig = AdapterConfig<StorageToken, StoragePort>
+
+// s3.adapter.ts
+@Adapter<S3AdapterConfig>({
   portToken: STORAGE_PORT,
   implementation: S3StorageService
 })
@@ -238,7 +261,12 @@ export class AppModule {}
 ### Adapters with Dependencies
 
 ```typescript
-@Adapter({
+// axios.types.ts
+export type HttpClientToken = typeof HTTP_CLIENT_PORT
+export type AxiosAdapterConfig = AdapterConfig<HttpClientToken, HttpClientPort>
+
+// axios.adapter.ts
+@Adapter<AxiosAdapterConfig>({
   portToken: HTTP_CLIENT_PORT,
   implementation: AxiosHttpClient,
   imports: [HttpModule],
@@ -252,6 +280,11 @@ export class AxiosAdapter extends AdapterBase<AxiosOptions> {}
 ### Mock Adapters for Testing
 
 ```typescript
+// mock-storage.types.ts
+export type StorageToken = typeof STORAGE_PORT
+export type MockStorageAdapterConfig = AdapterConfig<StorageToken, StoragePort>
+
+// mock-storage.service.ts
 @Injectable()
 class MockStorageService implements StoragePort {
   async upload(key: string, data: Buffer): Promise<string> {
@@ -262,7 +295,8 @@ class MockStorageService implements StoragePort {
   }
 }
 
-@Adapter({
+// mock-storage.adapter.ts
+@Adapter<MockStorageAdapterConfig>({
   portToken: STORAGE_PORT,
   implementation: MockStorageService
 })
