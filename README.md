@@ -1,8 +1,17 @@
-# nest-hex
+</br>
+<img src="https://raw.githubusercontent.com/LiorVainer/nest-hex/main/assets/icon.png">
+</br>
+</br>
+
+## nest-hex
+
+[![test coverage](https://badgen.net/badge/coverage/100%25/green?icon=github)](https://github.com/LiorVainer/nest-hex)
+[![npm version](https://img.shields.io/npm/v/nest-hex?color=f00e0e&logo=npm&style=flat)](https://www.npmjs.com/package/nest-hex)
+[![install size](https://packagephobia.com/badge?p=nest-hex)](https://packagephobia.com/result?p=nest-hex)
+[![minizipped size](https://img.shields.io/bundlephobia/minzip/nest-hex)](https://packagephobia.com/result?p=nest-hex)
+[![License](https://img.shields.io/github/license/liorvainer/nest-hex?color=orange)](https://www.npmjs.com/package/nest-hex)
 
 > A tiny, **class-based**, **NestJS-native** library for building **pluggable adapters** following the Ports & Adapters (Hexagonal Architecture) pattern with minimal boilerplate.
-
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 ## What is nest-hex?
 
