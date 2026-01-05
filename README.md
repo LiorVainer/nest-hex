@@ -1,5 +1,5 @@
 </br>
-<img src="https://raw.github.com/LiorVainer/nest-hex/main/assets/icon.png">
+<img src="https://raw.githubusercontent.com/LiorVainer/nest-hex/main/assets/icon.png">
 </br>
 </br>
 
