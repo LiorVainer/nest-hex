@@ -1,8 +1,10 @@
 /**
  * Template rendering utilities using Handlebars
- * Uses Bun's native file reading for better performance
+ * Uses Bun's native file reading when available for better performance
  */
 
+import { existsSync } from 'node:fs'
+import { readFile } from 'node:fs/promises'
 import Handlebars from 'handlebars'
 import type { TemplateContext } from '../types'
 
@@ -11,17 +13,24 @@ export async function renderTemplate(
 	context: TemplateContext,
 ): Promise<string> {
 	try {
-		const file = Bun.file(templatePath)
+		// Check if file exists before reading - use Bun API if available
+		const fileExists =
+			typeof Bun !== 'undefined'
+				? await Bun.file(templatePath).exists()
+				: existsSync(templatePath)
 
-		// Check if file exists before reading
-		if (!(await file.exists())) {
+		if (!fileExists) {
 			throw new Error(
 				`Template file not found: ${templatePath}\n` +
 					'Please ensure the template exists or report this as a bug.',
 			)
 		}
 
-		const templateSource = await file.text()
+		// Read template - use Bun API if available for better performance
+		const templateSource =
+			typeof Bun !== 'undefined'
+				? await Bun.file(templatePath).text()
+				: await readFile(templatePath, 'utf-8')
 
 		try {
 			const template = Handlebars.compile(templateSource)

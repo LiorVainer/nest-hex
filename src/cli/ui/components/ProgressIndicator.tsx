@@ -27,7 +27,7 @@ export function ProgressIndicator({
 	title,
 }: ProgressIndicatorProps): JSX.Element {
 	return (
-		<Box flexDirection="column" paddingY={1}>
+		<Box flexDirection="column">
 			{title && (
 				<Box marginBottom={1}>
 					<Text bold>{title}</Text>

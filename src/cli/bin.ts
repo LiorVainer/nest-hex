@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env -S node --disable-warning=ExperimentalWarning
 
 /**
  * nest-hex CLI entry point
@@ -28,6 +28,7 @@ program
 // Generate command - creates ports, adapters, services
 program
 	.command('generate [type] [portName] [adapterName]')
+	.alias('g')
 	.description(
 		'Generate nest-hex components (port, adapter, service, full)\n' +
 			'  For "full" type: nest-hex generate full <portName> <adapterName>',

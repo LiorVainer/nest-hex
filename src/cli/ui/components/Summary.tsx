@@ -109,8 +109,8 @@ export function Summary({
 		})
 
 	return (
-		<Box flexDirection="column">
-			<Box marginBottom={1}>
+		<Box flexDirection="column" gap={2}>
+			<Box>
 				{success ? (
 					<Text color="green" bold>
 						✅ Successfully generated {filesGenerated}/{totalFiles} files
@@ -124,14 +124,14 @@ export function Summary({
 			</Box>
 
 			{outputPath && (
-				<Box marginBottom={1}>
+				<Box>
 					<Text dimColor>Output: {outputPath}</Text>
 				</Box>
 			)}
 
 			{/* Show grouped files when separate arrays are provided */}
 			{showGroupedFiles ? (
-				<Box flexDirection="column" marginBottom={1}>
+				<Box flexDirection="column">
 					{portFiles && portFiles.length > 0 && (
 						<Box flexDirection="column" marginBottom={1}>
 							<Box marginBottom={1}>
@@ -142,7 +142,7 @@ export function Summary({
 					)}
 
 					{adapterFiles && adapterFiles.length > 0 && (
-						<Box flexDirection="column" marginBottom={1}>
+						<Box flexDirection="column">
 							<Box marginBottom={1}>
 								<Badge color="green">Adapter: {adapterName}</Badge>
 							</Box>

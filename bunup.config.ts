@@ -4,9 +4,10 @@ import { defineConfig } from 'bunup'
 const config: ReturnType<typeof defineConfig> = defineConfig({
 	entry: ['src/index.ts', 'src/cli/**/*.ts'],
 	outDir: 'dist',
-	format: 'cjs',
+	format: 'esm',
 	dts: true,
 	clean: true,
+	splitting: true,
 	// Don't bundle dependencies - they should be installed by users
 	external: [
 		'@nestjs/common',

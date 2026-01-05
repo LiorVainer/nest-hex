@@ -404,43 +404,55 @@ function GenerateUI({ options }: { options: GenerateCommandOptions }) {
 
 	// Show type selector if type not provided
 	if (showTypeSelector) {
-		return <TypeSelector onSubmit={handleTypeSelect} />
+		return (
+			<Box paddingY={1}>
+				<TypeSelector onSubmit={handleTypeSelect} />
+			</Box>
+		)
 	}
 
 	// Show port selector for adapter type
 	if (showPortSelector && selectedType === 'adapter') {
 		if (!portsLoaded) {
-			return <Text>Loading available ports...</Text>
+			return (
+				<Box paddingY={1}>
+					<Text>Loading available ports...</Text>
+				</Box>
+			)
 		}
 
 		return (
-			<PortSelector
-				ports={availablePorts}
-				onSubmit={handlePortSelect}
-				onBack={handlePortBack}
-			/>
+			<Box paddingY={1}>
+				<PortSelector
+					ports={availablePorts}
+					onSubmit={handlePortSelect}
+					onBack={handlePortBack}
+				/>
+			</Box>
 		)
 	}
 
 	// Show name input if name not provided
 	if (showNameInput && selectedType) {
 		return (
-			<NameInput
-				type={selectedType}
-				step={selectedType === 'full' ? nameInputStep : undefined}
-				portName={
-					selectedType === 'full' && nameInputStep === 'adapter'
-						? portName
-						: undefined
-				}
-				onSubmit={handleNameInput}
-			/>
+			<Box paddingY={1}>
+				<NameInput
+					type={selectedType}
+					step={selectedType === 'full' ? nameInputStep : undefined}
+					portName={
+						selectedType === 'full' && nameInputStep === 'adapter'
+							? portName
+							: undefined
+					}
+					onSubmit={handleNameInput}
+				/>
+			</Box>
 		)
 	}
 
 	if (error) {
 		return (
-			<Box flexDirection="column">
+			<Box flexDirection="column" paddingY={1}>
 				<Text color="red" bold>
 					❌ Generation failed
 				</Text>
@@ -485,7 +497,7 @@ function GenerateUI({ options }: { options: GenerateCommandOptions }) {
 			selectedType === 'service' ? selectedName : undefined
 
 		return (
-			<Box flexDirection="column">
+			<Box flexDirection="column" paddingY={1}>
 				<Summary
 					success={result.success}
 					filesGenerated={result.files?.length || 0}
@@ -512,7 +524,11 @@ function GenerateUI({ options }: { options: GenerateCommandOptions }) {
 		)
 	}
 
-	return <ProgressIndicator steps={steps} title={getTitle()} />
+	return (
+		<Box paddingY={1}>
+			<ProgressIndicator steps={steps} title={getTitle()} />
+		</Box>
+	)
 }
 
 /**
