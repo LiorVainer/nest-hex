@@ -1,7 +1,6 @@
-</br>
-<img src="https://raw.githubusercontent.com/LiorVainer/nest-hex/main/assets/icon.png">
-</br>
-</br>
+<p align="center">
+  <img src="https://raw.githubusercontent.com/LiorVainer/nest-hex/main/assets/icon.png" width="150">
+</p>
 
 ## nest-hex
 
