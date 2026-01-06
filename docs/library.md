@@ -9,7 +9,7 @@
   - [@Adapter Decorator](#adapter-decorator)
   - [Adapter Class](#adapter-class)
   - [@InjectPort Decorator](#injectport-decorator)
-  - [DomainModule Class](#portmodule-class)
+  - [DomainModule Class](#domainmodule-class)
 - [Getting Started](#getting-started)
 - [Advanced Usage](#advanced-usage)
   - [Adapters with Dependencies](#adapters-with-dependencies)
