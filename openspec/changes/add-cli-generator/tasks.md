@@ -82,7 +82,7 @@
 ### 3.2 Port Generator
 - [x] 3.2.1 Create `src/cli/generators/port.generator.ts`
 - [ ] 3.2.2 Implement port name validation
-- [ ] 3.2.3 Implement module inclusion prompt ("Include PortModule? Y/n")
+- [ ] 3.2.3 Implement module inclusion prompt ("Include DomainModule? Y/n")
 - [x] 3.2.4 Implement multi-file generation (token, interface, service, optional module)
 - [ ] 3.2.5 Add example generation option (only when module included)
 - [ ] 3.2.6 Add registration type selection (sync/async) when module included
@@ -109,7 +109,7 @@
 ### 4.1 UI Components
 - [ ] 4.1.1 Create `src/cli/ui/components/ComponentSelector.tsx` (multi-select)
 - [ ] 4.1.2 Create `src/cli/ui/components/PathInput.tsx` for output paths
-- [ ] 4.1.3 Create `src/cli/ui/components/ModuleConfirmation.tsx` (Include PortModule? Y/n)
+- [ ] 4.1.3 Create `src/cli/ui/components/ModuleConfirmation.tsx` (Include DomainModule? Y/n)
 - [ ] 4.1.4 Create `src/cli/ui/components/RegistrationTypeSelect.tsx` (sync/async radio)
 - [ ] 4.1.5 Create `src/cli/ui/components/Summary.tsx` for generation summary
 - [ ] 4.1.6 Create `src/cli/ui/components/ProgressIndicator.tsx` (spinner with status text)
@@ -124,7 +124,7 @@
 ### 4.3 Interactive Flows
 - [ ] 4.3.1 Implement multi-select flow for component selection
 - [ ] 4.3.2 Implement name input with validation
-- [ ] 4.3.3 Implement "Include PortModule?" confirmation prompt (for Port generation)
+- [ ] 4.3.3 Implement "Include DomainModule?" confirmation prompt (for Port generation)
 - [ ] 4.3.4 Implement "Generate example?" confirmation prompt (only if module included)
 - [ ] 4.3.5 Implement registration type selection (sync/async) with descriptions
 - [ ] 4.3.6 Implement path selection with config defaults

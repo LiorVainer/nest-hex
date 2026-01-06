@@ -25,7 +25,7 @@ import {
  *   imports: [HttpModule],
  *   providers: [{ provide: 'CONFIG', useValue: {...} }]
  * })
- * export class S3Adapter extends AdapterBase<S3Options> {}
+ * export class S3Adapter extends AdapterBase<S3ConfigOptions> {}
  * ```
  *
  * Advanced adapter with dynamic configuration:
@@ -34,12 +34,12 @@ import {
  *   portToken: STORAGE_PORT,
  *   implementation: S3Service
  * })
- * export class S3Adapter extends AdapterBase<S3Options> {
- *   protected imports(options: S3Options) {
+ * export class S3Adapter extends AdapterBase<S3ConfigOptions> {
+ *   protected imports(options: S3ConfigOptions) {
  *     return [HttpModule.register({ timeout: options.timeout })]
  *   }
  *
- *   protected extraProviders(options: S3Options) {
+ *   protected extraProviders(options: S3ConfigOptions) {
  *     return [{ provide: 'S3_CONFIG', useValue: options }]
  *   }
  * }

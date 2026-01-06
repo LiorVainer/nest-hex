@@ -5,6 +5,10 @@
  * These options are infrastructure-specific and should NOT be exposed to the domain layer.
  */
 
+import type { AdapterConfig } from '../../../../src'
+import type { OBJECT_STORAGE_TOKEN } from '../../object-storage.token'
+import type { ObjectStoragePort } from '../../object-storage.port'
+
 /**
  * Configuration options for the S3 adapter.
  *
@@ -83,11 +87,24 @@ export interface S3ConfigOptions {
 }
 
 /**
+ * Type alias for the object storage port token.
+ */
+export type ObjectStorageToken = typeof OBJECT_STORAGE_TOKEN
+
+/**
+ * Type-safe adapter configuration for S3 adapter.
+ *
+ * This type ensures that the adapter's portToken and implementation
+ * are correctly typed and match the ObjectStoragePort interface.
+ */
+export type S3AdapterConfig = AdapterConfig<ObjectStorageToken, ObjectStoragePort>
+
+/**
  * Why These Options?
  *
  * These options are specific to AWS S3 infrastructure and should never leak
  * into the domain layer. The domain only knows about ObjectStoragePort
- * interface, not S3Options.
+ * interface, not S3ConfigOptions.
  *
  * Benefits:
  * - Domain code remains infrastructure-agnostic

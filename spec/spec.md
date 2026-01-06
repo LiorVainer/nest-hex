@@ -78,7 +78,7 @@ Suggested exports:
 
 - **Base Classes:**
   - `Adapter` — base class to build adapter modules with minimal repetition.
-  - `PortModule` — base class to build port modules that accept adapters.
+  - `DomainModule` — base class to build port modules that accept adapters.
 
 - **Decorators:**
   - `@Port({ token, implementation })` — Declares which port token the adapter provides and its implementation class.
@@ -265,7 +265,7 @@ import { PORT_TOKEN_METADATA, PORT_IMPLEMENTATION_METADATA } from './constants';
  *   token: OBJECT_STORAGE_PROVIDER,
  *   implementation: S3ObjectStorageService
  * })
- * class S3Adapter extends Adapter<S3Options> {}
+ * class S3Adapter extends Adapter<S3ConfigOptions> {}
  * ```
  */
 export function Port<TToken>(config: {
@@ -320,12 +320,12 @@ import { AdapterModule } from './types';
  *
  * @example
  * ```typescript
- * export default defineAdapter<typeof STORAGE_TOKEN, S3Options>()(
+ * export default defineAdapter<typeof STORAGE_TOKEN, S3ConfigOptions>()(
  *   @Port({
  *     token: STORAGE_TOKEN,
  *     implementation: S3Service
  *   })
- *   class S3Adapter extends Adapter<S3Options> {}
+ *   class S3Adapter extends Adapter<S3ConfigOptions> {}
  * );
  * ```
  */
@@ -371,18 +371,18 @@ import { AdapterModule } from './types';
  * @example
  * ```typescript
  * @Module({})
- * export class ObjectStorageModule extends PortModule<typeof ObjectStorageService> {}
+ * export class ObjectStorageModule extends DomainModule<typeof ObjectStorageService> {}
  * ```
  */
 @Module({})
-export class PortModule<_TService> {
+export class DomainModule<_TService> {
   static register<TToken>({
     adapter,
   }: {
     adapter?: AdapterModule<TToken>;
   }): DynamicModule {
     return {
-      module: PortModule,
+      module: DomainModule,
       imports: adapter ? [adapter] : [],
     };
   }
@@ -398,7 +398,7 @@ export class PortModule<_TService> {
 export { Adapter } from './core/adapter.base';
 export { InjectPort, Port } from './core/decorators';
 export { defineAdapter } from './core/define-adapter';
-export { PortModule } from './core/port-module.base';
+export { DomainModule } from './core/domain-module.base';
 export type { AdapterModule } from './core/types';
 ```
 
@@ -480,11 +480,11 @@ export class ObjectStorageService {
 ```ts
 // libs/storage/src/object-storage.module.ts
 import { Module } from '@nestjs/common';
-import { PortModule } from 'nest-hex';
+import { DomainModule } from 'nest-hex';
 import { ObjectStorageService } from './object-storage.service';
 
 @Module({})
-export class ObjectStorageModule extends PortModule<typeof ObjectStorageService> {}
+export class ObjectStorageModule extends DomainModule<typeof ObjectStorageService> {}
 ```
 
 ---
@@ -660,11 +660,11 @@ export class CurrencyRatesService {
 ```ts
 // libs/rates/src/currency-rates.module.ts
 import { Module } from '@nestjs/common';
-import { PortModule } from 'nest-hex';
+import { DomainModule } from 'nest-hex';
 import { CurrencyRatesService } from './currency-rates.service';
 
 @Module({})
-export class CurrencyRatesModule extends PortModule<typeof CurrencyRatesService> {}
+export class CurrencyRatesModule extends DomainModule<typeof CurrencyRatesService> {}
 ```
 
 #### HTTP adapter options

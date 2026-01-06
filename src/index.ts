@@ -3,6 +3,6 @@ export { AdapterBase } from './core/adapter.base'
 // Decorators
 export { Adapter, InjectPort } from './core/decorators'
 // Module helpers
-export { PortModule } from './core/port-module.base'
+export { DomainModule } from './core/domain-module.base'
 // Type definitions
 export type { AdapterConfig } from './core/types'

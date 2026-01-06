@@ -2,11 +2,11 @@
  * Currency Rates Port Module
  *
  * This port module provides currency exchange rate capabilities.
- * It extends PortModule to accept any adapter that provides CURRENCY_RATES_PROVIDER.
+ * It extends DomainModule to accept any adapter that provides CURRENCY_RATES_PROVIDER.
  */
 
 import { Module } from '@nestjs/common'
-import { PortModule } from '../../src'
+import { DomainModule } from '../../src'
 import type { CurrencyRatesService } from './currency-rates.service'
 
 /**
@@ -33,7 +33,7 @@ import type { CurrencyRatesService } from './currency-rates.service'
  * ```
  */
 @Module({})
-export class CurrencyRatesModule extends PortModule {}
+export class CurrencyRatesModule extends DomainModule {}
 
 /**
  * Swapping Adapters Example:

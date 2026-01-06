@@ -13,7 +13,7 @@
 import { Adapter, AdapterBase } from '../../../../src'
 import { OBJECT_STORAGE_TOKEN } from '../../object-storage.token'
 import { S3ObjectStorageService } from './s3.service'
-import type { S3ConfigOptions } from './s3.types'
+import type { S3AdapterConfig, S3ConfigOptions } from './s3.types'
 
 /**
  * S3 adapter for object storage.
@@ -46,7 +46,7 @@ import type { S3ConfigOptions } from './s3.types'
  * })
  * ```
  */
-@Adapter({
+@Adapter<S3AdapterConfig>({
 	portToken: OBJECT_STORAGE_TOKEN,
 	implementation: S3ObjectStorageService,
 })

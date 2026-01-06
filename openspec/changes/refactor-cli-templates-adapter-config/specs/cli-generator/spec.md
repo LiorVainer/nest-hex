@@ -13,13 +13,13 @@ The CLI SHALL generate adapter implementations for existing or new ports using t
 - **AND** adapter class is named `S3Adapter`
 - **AND** CLI creates `adapters/s3/s3.service.ts` implementing port interface
 - **AND** CLI creates `adapters/s3/s3.types.ts` with:
-  - Options interface (e.g., `S3Options`)
+  - Options interface (e.g., `S3ConfigOptions`)
   - AdapterConfig type export: `export type S3AdapterConfig = AdapterConfig<ObjectStorageToken, ObjectStoragePort>`
   - Import for `AdapterConfig` from core types
   - Import for `ObjectStorageToken` from port token file
   - Import for `ObjectStoragePort` from port interface file
 - **AND** adapter imports token from existing port token file
-- **AND** adapter extends AdapterBase<S3Options>
+- **AND** adapter extends AdapterBase<S3ConfigOptions>
 - **AND** @Adapter decorator uses generic type parameter for full type safety
 
 #### Scenario: Generate adapter without existing port

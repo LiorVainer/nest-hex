@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it } from 'bun:test'
 import { Test, type TestingModule } from '@nestjs/testing'
 import 'reflect-metadata'
 import { Injectable, Module } from '@nestjs/common'
-import { InjectPort, PortModule } from '../../src'
+import { InjectPort, DomainModule } from '../../src'
 import { TestStorageAdapter } from '../fixtures/test-adapters'
 import type { TestStoragePort } from '../fixtures/test-ports'
 import { TEST_STORAGE_TOKEN } from '../fixtures/test-tokens'
@@ -90,12 +90,12 @@ describe('Port Token Injection (Integration)', () => {
 		})
 	})
 
-	describe('PortModule with adapter', () => {
+	describe('DomainModule with adapter', () => {
 		it('should import adapter and make token available', async () => {
 			@Module({
 				providers: [],
 			})
-			class StorageFeatureModule extends PortModule {}
+			class StorageFeatureModule extends DomainModule {}
 
 			const module = await Test.createTestingModule({
 				imports: [

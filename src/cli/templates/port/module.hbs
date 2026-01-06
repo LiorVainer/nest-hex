@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common'
-import { PortModule } from '{{coreImportPath}}'
+import { DomainModule } from '{{coreImportPath}}'
 import type { {{namePascal}}Service } from './{{nameKebab}}.service'
 
 @Module({})
-export class {{namePascal}}Module extends PortModule {}
+export class {{namePascal}}Module extends DomainModule {}

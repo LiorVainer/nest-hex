@@ -70,7 +70,7 @@ export interface StoragePort {
 import type { AdapterConfig } from 'nest-hex'
 import type { STORAGE_PORT, StoragePort } from './storage.port'
 
-export interface S3Options {
+export interface S3ConfigOptions {
   bucket: string
   region: string
 }
@@ -82,11 +82,11 @@ export type S3AdapterConfig = AdapterConfig<StorageToken, StoragePort>
 // s3.service.ts - Implementation service
 import { Injectable } from '@nestjs/common'
 import type { StoragePort } from './storage.port'
-import type { S3Options } from './s3.types'
+import type { S3ConfigOptions } from './s3.types'
 
 @Injectable()
 export class S3Service implements StoragePort {
-  constructor(private options: S3Options) {}
+  constructor(private options: S3ConfigOptions) {}
 
   async upload(key: string, data: Buffer): Promise<string> {
     // AWS S3 upload logic here
@@ -103,14 +103,14 @@ export class S3Service implements StoragePort {
 import { Adapter, AdapterBase } from 'nest-hex'
 import { STORAGE_PORT } from './storage.port'
 import { S3Service } from './s3.service'
-import type { S3AdapterConfig, S3Options } from './s3.types'
+import type { S3AdapterConfig, S3ConfigOptions } from './s3.types'
 
 // Single decorator with type safety!
 @Adapter<S3AdapterConfig>({
   portToken: STORAGE_PORT,
   implementation: S3Service
 })
-export class S3Adapter extends AdapterBase<S3Options> {}
+export class S3Adapter extends AdapterBase<S3ConfigOptions> {}
 ```
 
 ### 3. Create a Domain Service
@@ -135,16 +135,16 @@ export class FileService {
 }
 ```
 
-### 4. Create a Port Module
+### 4. Create a Domain Module
 
 ```typescript
 // file.module.ts
 import { Module } from '@nestjs/common'
-import { PortModule } from 'nest-hex'
+import { DomainModule } from 'nest-hex'
 import { FileService } from './file.service'
 
 @Module({})
-export class FileModule extends PortModule {}
+export class FileModule extends DomainModule {}
 ```
 
 ### 5. Wire It Up
@@ -223,7 +223,7 @@ export type S3AdapterConfig = AdapterConfig<StorageToken, StoragePort>
   portToken: STORAGE_PORT,
   implementation: S3StorageService
 })
-export class S3Adapter extends AdapterBase<S3Options> {}
+export class S3Adapter extends AdapterBase<S3ConfigOptions> {}
 ```
 
 ## Swappable Infrastructure
@@ -282,7 +282,7 @@ export type AxiosAdapterConfig = AdapterConfig<HttpClientToken, HttpClientPort>
     { provide: 'HTTP_CONFIG', useValue: { timeout: 5000 } }
   ]
 })
-export class AxiosAdapter extends AdapterBase<AxiosOptions> {}
+export class AxiosAdapter extends AdapterBase<AxiosConfigOptions> {}
 ```
 
 ### Mock Adapters for Testing
