@@ -23,7 +23,7 @@ This violates the principle of clear, unambiguous naming aligned with Hexagonal 
 
 **BREAKING CHANGES:**
 
-1. **Rename `FeatureModule` → `PortModule`**
+1. **Rename `FeatureModule` → `DomainModule`**
    - Makes explicit that it consumes a port via adapter
    - Aligns with Hexagonal Architecture terminology
 

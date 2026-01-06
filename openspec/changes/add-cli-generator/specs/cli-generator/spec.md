@@ -28,14 +28,14 @@ The CLI SHALL provide an interactive multi-select interface for users to choose 
 
 #### Scenario: Interactive port module option selection
 - **WHEN** user generates port (any method)
-- **THEN** CLI prompts: "Include PortModule? (Y/n)"
+- **THEN** CLI prompts: "Include DomainModule? (Y/n)"
 - **AND** if user answers yes, CLI generates all 4 files (token, interface, service, module)
 - **AND** if user answers no, CLI generates only 3 files (token, interface, service)
 - **AND** CLI shows appropriate file count in progress
 
 #### Scenario: Interactive registration option selection
 - **WHEN** user generates port (any method)
-- **AND** user chose to include PortModule
+- **AND** user chose to include DomainModule
 - **THEN** CLI prompts: "Generate example usage? (Y/n)"
 - **AND** if user answers yes, CLI shows radio buttons:
   - "Sync registration (for static config)"
@@ -43,7 +43,7 @@ The CLI SHALL provide an interactive multi-select interface for users to choose 
 - **AND** CLI generates appropriate example based on selection
 
 #### Scenario: Skip example when no module generated
-- **WHEN** user generates port without PortModule
+- **WHEN** user generates port without DomainModule
 - **THEN** CLI does NOT prompt for example generation
 - **AND** CLI generates only token, interface, and service files
 - **AND** CLI shows message: "Generated 3/3 files (no module)"
@@ -57,7 +57,7 @@ The CLI SHALL generate complete port modules (feature modules) with all required
   - Token file (e.g., `OBJECT_STORAGE_PORT`)
   - Port interface (defines contract)
   - Domain service (business logic, injects port via @InjectPort)
-  - PortModule (exports service, accepts adapter via register())
+  - DomainModule (exports service, accepts adapter via register())
 - **Service command**: Generates a standalone service that injects an existing port
   - Single service file with @Injectable
   - No module, no token, no interface
@@ -65,17 +65,17 @@ The CLI SHALL generate complete port modules (feature modules) with all required
 
 #### Scenario: Generate port with module (default)
 - **WHEN** user runs `npx nest-hex generate port ObjectStorage`
-- **AND** user selects "Include PortModule? (Y/n)": Yes
+- **AND** user selects "Include DomainModule? (Y/n)": Yes
 - **THEN** CLI creates `object-storage.token.ts` with Symbol token export (using PORT suffix, not PROVIDER)
 - **AND** CLI creates `object-storage.port.ts` with interface definition
 - **AND** CLI creates `object-storage.service.ts` with @InjectPort decorator usage
-- **AND** CLI creates `object-storage.module.ts` extending PortModule
+- **AND** CLI creates `object-storage.module.ts` extending DomainModule
 - **AND** all files use tabs for indentation (per project defaults)
 - **AND** all files compile without TypeScript errors
 
 #### Scenario: Generate port without module
 - **WHEN** user runs `npx nest-hex generate port ObjectStorage`
-- **AND** user selects "Include PortModule? (Y/n)": No
+- **AND** user selects "Include DomainModule? (Y/n)": No
 - **THEN** CLI creates `object-storage.token.ts` with Symbol token export
 - **AND** CLI creates `object-storage.port.ts` with interface definition
 - **AND** CLI creates `object-storage.service.ts` with @InjectPort decorator usage
@@ -95,25 +95,25 @@ The CLI SHALL generate complete port modules (feature modules) with all required
 - **AND** CLI prompts user to enter a valid name
 
 #### Scenario: Generate with example usage (sync registration)
-- **WHEN** user generates port with PortModule included
+- **WHEN** user generates port with DomainModule included
 - **AND** user selects "Generate example usage" option
 - **AND** user selects "Sync (register)" registration type
 - **THEN** CLI creates additional `object-storage.example.ts` file
-- **AND** example shows PortModule.register({ adapter: Adapter.register({ options }) })
+- **AND** example shows DomainModule.register({ adapter: Adapter.register({ options }) })
 - **AND** example includes commented configuration options
 - **AND** example shows how to use service in controller
 
 #### Scenario: Generate with example usage (async registration)
-- **WHEN** user generates port with PortModule included
+- **WHEN** user generates port with DomainModule included
 - **AND** user selects "Generate example usage" option
 - **AND** user selects "Async (registerAsync)" registration type
 - **THEN** CLI creates `object-storage.example.ts` with async pattern
-- **AND** example shows PortModule.register({ adapter: Adapter.registerAsync({ inject: [ConfigService], useFactory: ... }) })
+- **AND** example shows DomainModule.register({ adapter: Adapter.registerAsync({ inject: [ConfigService], useFactory: ... }) })
 - **AND** example demonstrates ConfigModule integration
 - **AND** example shows environment variable usage
 
 #### Scenario: Generate port without module (use in existing module)
-- **WHEN** user generates port without PortModule
+- **WHEN** user generates port without DomainModule
 - **THEN** service file includes comment showing how to add to existing module
 - **AND** comment shows: "Import this service in your module's providers array"
 - **AND** comment includes example of direct provider registration
@@ -128,7 +128,7 @@ The CLI SHALL generate adapter implementations for existing or new ports.
 - **AND** CLI creates `adapters/s3/s3.service.ts` implementing port interface
 - **AND** CLI creates `adapters/s3/s3.types.ts` with options interface
 - **AND** adapter imports token from existing port
-- **AND** adapter extends Adapter<S3Options>
+- **AND** adapter extends Adapter<S3ConfigOptions>
 
 #### Scenario: Generate adapter without existing port
 - **WHEN** user runs `npx nest-hex generate adapter HTTP` without `--port` flag

@@ -445,11 +445,11 @@ export interface ObjectStoragePort {
 **object-storage.module.ts:**
 ```typescript
 import { Module } from '@nestjs/common'
-import { PortModule } from 'nest-hex'
+import { DomainModule } from 'nest-hex'
 import { ObjectStorageService } from './object-storage.service'
 
 @Module({})
-export class ObjectStorageModule extends PortModule {}
+export class ObjectStorageModule extends DomainModule {}
 ```
 
 ---

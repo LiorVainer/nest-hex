@@ -37,17 +37,17 @@ The library SHALL provide comprehensive unit tests for the `Adapter` base class 
 - **THEN** the returned providers SHALL be included in the module's providers array
 - **AND** the extra providers SHALL receive the adapter options
 
-### Requirement: Unit Testing for PortModule Base Class
+### Requirement: Unit Testing for DomainModule Base Class
 
-The library SHALL provide unit tests for the `PortModule` base class ensuring proper adapter acceptance and module registration.
+The library SHALL provide unit tests for the `DomainModule` base class ensuring proper adapter acceptance and module registration.
 
-#### Scenario: PortModule register() accepts adapter module
-- **WHEN** `PortModule.register()` is called with an adapter parameter
+#### Scenario: DomainModule register() accepts adapter module
+- **WHEN** `DomainModule.register()` is called with an adapter parameter
 - **THEN** it SHALL return a `DynamicModule` importing the adapter
-- **AND** the module SHALL reference `PortModule` as the module class
+- **AND** the module SHALL reference `DomainModule` as the module class
 
-#### Scenario: PortModule register() works without adapter
-- **WHEN** `PortModule.register()` is called without an adapter parameter
+#### Scenario: DomainModule register() works without adapter
+- **WHEN** `DomainModule.register()` is called without an adapter parameter
 - **THEN** it SHALL return a valid `DynamicModule` with empty imports
 - **AND** the module SHALL not throw an error
 

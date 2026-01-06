@@ -1,21 +1,21 @@
 /**
- * Object Storage Port Module
+ * Object Storage Domain Module
  *
- * This port module provides object storage capabilities to the application.
- * It extends PortModule to accept any adapter that provides OBJECT_STORAGE_PROVIDER.
+ * This domain module provides object storage capabilities to the application.
+ * It extends DomainModule to accept any adapter that provides OBJECT_STORAGE_PROVIDER.
  *
  * Key Points:
- * - Extends PortModule
+ * - Extends DomainModule
  * - Uses register({ adapter }) to accept an adapter module
  * - Type-safe: TypeScript infers token type from the adapter
  */
 
 import { Module } from '@nestjs/common'
-import { PortModule } from '../../src'
+import { DomainModule } from '../../src'
 import type { ObjectStorageService } from './object-storage.service'
 
 /**
- * Port module for object storage.
+ * Domain module for object storage.
  *
  * This module provides the ObjectStorageService which contains domain logic
  * for managing file uploads, downloads, and organization.
@@ -38,14 +38,14 @@ import type { ObjectStorageService } from './object-storage.service'
  * ```
  */
 @Module({})
-export class ObjectStorageModule extends PortModule {}
+export class ObjectStorageModule extends DomainModule {}
 
 /**
  * What Happens When You Call ObjectStorageModule.register({ adapter })?
  *
  * 1. TypeScript verifies that `adapter` is an AdapterModule<typeof OBJECT_STORAGE_PROVIDER>
  *
- * 2. FeatureModule.register() creates a DynamicModule:
+ * 2. DomainModule.register() creates a DynamicModule:
  *    {
  *      module: ObjectStorageModule,
  *      imports: [adapter],  // The S3/Azure/GCS/etc adapter module

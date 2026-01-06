@@ -8,7 +8,7 @@ The nest-hex library requires developers to manually create multiple files with 
 1. Create port token file
 2. Create port interface
 3. Create port service with @InjectPort
-4. Create port module extending PortModule
+4. Create port module extending DomainModule
 5. For each adapter: create adapter class, service implementation, and types
 
 This manual process is repetitive, error-prone, and slows developer onboarding.
@@ -300,7 +300,7 @@ Existing examples use `_PROVIDER` suffix. This is acceptable for backward compat
 - **Token file** (`object-storage.token.ts`) - Port token Symbol
 - **Port interface** (`object-storage.port.ts`) - Contract definition
 - **Domain service** (`object-storage.service.ts`) - Business logic that injects port via @InjectPort
-- **PortModule** (`object-storage.module.ts`) - *(Optional)* Module that accepts adapter via register()
+- **DomainModule** (`object-storage.module.ts`) - *(Optional)* Module that accepts adapter via register()
 
 **Service Command** generates a standalone service:
 - **Single service file** - Just @Injectable class with @InjectPort injection
@@ -320,7 +320,7 @@ src/storage/
   ├── object-storage.token.ts      # Defines OBJECT_STORAGE_PORT
   ├── object-storage.port.ts       # Interface ObjectStoragePort
   ├── object-storage.service.ts    # Service with business logic
-  └── object-storage.module.ts     # PortModule<typeof ObjectStorageService>
+  └── object-storage.module.ts     # DomainModule<typeof ObjectStorageService>
 
 // Port command WITHOUT module:
 src/storage/
@@ -401,13 +401,13 @@ src/cli/
 3. User selects components (e.g., Port + Adapter)
 4. CLI prompts for: Name, Output path (with config defaults)
 5. If Port or Full selected:
-   a. CLI prompts: "Include PortModule? (Y/n)" [default: Yes]
-   b. If PortModule included:
+   a. CLI prompts: "Include DomainModule? (Y/n)" [default: Yes]
+   b. If DomainModule included:
       i.  CLI prompts: "Generate example usage? (Y/n)"
       ii. If yes, CLI shows radio select:
           - "Sync registration (for static config)"
           - "Async registration (for ConfigService/dynamic config)"
-   c. If PortModule NOT included:
+   c. If DomainModule NOT included:
       i. Skip example generation prompts
       ii. Note: Service will include comment on how to register in existing module
 6. CLI loads nest-hex.config.ts (if exists)
@@ -421,7 +421,7 @@ src/cli/
    e. Check if file exists (prompt to overwrite)
    f. Write file
    g. Show checkmark: "✓ Created object-storage.token.ts"
-10. If PortModule not included:
+10. If DomainModule not included:
     a. Show info: "ℹ Skipped module generation"
     b. Service file includes registration instructions in comments
 11. If example usage requested (only when module included):
@@ -442,7 +442,7 @@ src/cli/
 
 ### 11. Port Module Option
 
-**Decision:** Allow users to generate ports with or without PortModule.
+**Decision:** Allow users to generate ports with or without DomainModule.
 
 **Rationale:**
 - Flexibility for different project structures
@@ -452,7 +452,7 @@ src/cli/
 
 **User Flow:**
 ```
-CLI: "Include PortModule? (Y/n)" [default: Yes]
+CLI: "Include DomainModule? (Y/n)" [default: Yes]
 
 If Yes:
   - Generate: token, interface, service, module (4 files)

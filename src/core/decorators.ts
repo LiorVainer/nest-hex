@@ -29,7 +29,7 @@ import type { AdapterConfig } from './types.ts'
  *   portToken: OBJECT_STORAGE_PORT,
  *   implementation: S3ObjectStorageService
  * })
- * class S3Adapter extends AdapterBase<S3Options> {}
+ * class S3Adapter extends AdapterBase<S3ConfigOptions> {}
  * ```
  *
  * @example

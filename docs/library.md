@@ -9,7 +9,7 @@
   - [@Adapter Decorator](#adapter-decorator)
   - [Adapter Class](#adapter-class)
   - [@InjectPort Decorator](#injectport-decorator)
-  - [PortModule Class](#portmodule-class)
+  - [DomainModule Class](#portmodule-class)
 - [Getting Started](#getting-started)
 - [Advanced Usage](#advanced-usage)
   - [Adapters with Dependencies](#adapters-with-dependencies)
@@ -96,11 +96,11 @@ A **port module** provides your domain service and accepts any compatible adapte
 
 ```typescript
 import { Module } from '@nestjs/common'
-import { PortModule } from 'nest-hex'
+import { DomainModule } from 'nest-hex'
 import { FileService } from './file.service'
 
 @Module({})
-export class FileModule extends PortModule {}
+export class FileModule extends DomainModule {}
 
 // Usage in app module:
 @Module({
@@ -437,9 +437,9 @@ The `@InjectPort` decorator provides clearer semantics and intent.
 
 ---
 
-### PortModule Class
+### DomainModule Class
 
-The `PortModule` base class provides a `register()` method that accepts any compatible adapter.
+The `DomainModule` base class provides a `register()` method that accepts any compatible adapter.
 
 **Type Parameter:**
 - `TService` - The service type (e.g., `typeof FileService`)
@@ -458,7 +458,7 @@ The `PortModule` base class provides a `register()` method that accepts any comp
 **Example:**
 ```typescript
 @Module({})
-export class FileModule extends PortModule {}
+export class FileModule extends DomainModule {}
 
 // Usage:
 FileModule.register({
@@ -581,11 +581,11 @@ export class FileService {
 ```typescript
 // src/modules/file.module.ts
 import { Module } from '@nestjs/common'
-import { PortModule } from 'nest-hex'
+import { DomainModule } from 'nest-hex'
 import { FileService } from '../services/file.service'
 
 @Module({})
-export class FileModule extends PortModule {}
+export class FileModule extends DomainModule {}
 ```
 
 ### 5. Wire It All Together

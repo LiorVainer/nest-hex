@@ -50,7 +50,7 @@ This is a NestJS adapter library implementing the Ports & Adapters (Hexagonal Ar
 
 ### Feature Module Pattern
 - Feature modules expose domain services that consume adapters
-- Extend `PortModule`
+- Extend `DomainModule`
 - Accept adapters via `register({ adapter: DynamicModule })`
 - Keep business logic independent of infrastructure
 
@@ -122,7 +122,7 @@ The complete implementation specification lives in `spec/spec.md`, which include
 Key implementation files:
 - `src/core/types.ts` - Type definitions including `AdapterConfig`
 - `src/core/adapter.base.ts` - `AdapterBase` class for building adapters
-- `src/core/port-module.base.ts` - `PortModule` base class for feature modules
+- `src/core/domain-module.base.ts` - `DomainModule` base class for feature modules
 - `src/core/decorators.ts` - `@Adapter` and `@InjectPort` decorators
 - `src/index.ts` - Public API exports
 

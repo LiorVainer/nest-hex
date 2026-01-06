@@ -9,7 +9,7 @@
 
 - [x] 2.1 Write unit tests for `Adapter.register()` method
 - [x] 2.2 Write unit tests for `Adapter.registerAsync()` method
-- [x] 2.3 Write unit tests for `PortModule.register()` method
+- [x] 2.3 Write unit tests for `DomainModule.register()` method
 - [x] 2.4 Write unit tests for `@Port` decorator metadata storage
 - [x] 2.5 Write unit tests for `@InjectPort` decorator parameter injection
 - [x] 2.6 Write unit tests for `defineAdapter()` helper type constraints
