@@ -12,6 +12,20 @@
 
 > A tiny, **class-based**, **NestJS-native** library for building **pluggable adapters** following the Ports & Adapters (Hexagonal Architecture) pattern with minimal boilerplate.
 
+## Table of Contents
+
+- [What is nest-hex?](#what-is-nest-hex)
+- [Why Hexagonal Architecture?](#why-hexagonal-architecture)
+- [Features](#features)
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [CLI](#cli)
+- [Key Benefits](#key-benefits)
+- [Swappable Infrastructure](#swappable-infrastructure)
+- [Advanced Features](#advanced-features)
+- [Full Documentation](#documentation)
+- [Examples](#examples)
+
 ## What is nest-hex?
 
 **nest-hex** eliminates boilerplate when building NestJS applications with the Ports & Adapters (Hexagonal Architecture) pattern. It provides decorators and base classes that handle all the repetitive wiring, letting you focus on business logic.
@@ -42,11 +56,6 @@ yarn add nest-hex
 pnpm add nest-hex
 # or
 bun add nest-hex
-```
-
-**Peer dependencies:**
-```bash
-npm install @nestjs/common @nestjs/core reflect-metadata
 ```
 
 ## Quick Start
