@@ -398,7 +398,7 @@ export class DomainModule<_TService> {
 export { Adapter } from './core/adapter.base';
 export { InjectPort, Port } from './core/decorators';
 export { defineAdapter } from './core/define-adapter';
-export { DomainModule } from './core/port-module.base';
+export { DomainModule } from './core/domain-module.base';
 export type { AdapterModule } from './core/types';
 ```
 
