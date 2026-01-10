@@ -10,6 +10,7 @@ export interface GeneratorOptions {
 	registrationType?: 'sync' | 'async'
 	generateExample?: boolean
 	dryRun?: boolean
+	force?: boolean
 }
 
 export interface GeneratorContext extends Record<string, unknown> {
