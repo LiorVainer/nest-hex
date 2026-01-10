@@ -60,10 +60,10 @@
 - [x] 3.2.1 Test includeModule=false skips module generation ✅
 - [x] 3.2.2 Test includeService=false skips service generation ✅
 - [x] 3.2.3 Test minimal generation (no module, no service) ✅
-- [ ] 3.2.4 Test generateExample=true includes example code
-- [ ] 3.2.5 Test registrationType=sync generates sync registration
-- [ ] 3.2.6 Test registrationType=async generates async registration
-- [ ] 3.2.7 Test dryRun=true simulates without writing files
+- [x] 3.2.4 Test generateExample=true includes example code ✅
+- [x] 3.2.5 Test registrationType=sync generates sync registration ✅
+- [x] 3.2.6 Test registrationType=async generates async registration ✅
+- [x] 3.2.7 Test dryRun=true simulates without writing files ✅
 
 ### 3.3 Port Output Validation
 - [x] 3.3.1 Test generated port token uses PORT suffix (not PROVIDER) ✅
@@ -75,10 +75,10 @@
 
 ### 3.4 Port Edge Cases
 - [x] 3.4.1 Test port generation in non-existent directory (should create) ✅
-- [ ] 3.4.2 Test port generation with existing files (should error without --force)
-- [ ] 3.4.3 Test port generation with --force overwrites existing files
+- [x] 3.4.2 Test port generation with existing files (should error without --force) ✅
+- [x] 3.4.3 Test port generation with --force overwrites existing files ✅
 - [x] 3.4.4 Test port name with hyphens (e.g., object-storage) ✅
-- [ ] 3.4.5 Test port name with underscores (e.g., object_storage)
+- [x] 3.4.5 Test port name with underscores (e.g., object_storage) ✅
 - [x] 3.4.6 Test port name in PascalCase (e.g., ObjectStorage) ✅
 
 ## 4. AdapterGenerator Tests

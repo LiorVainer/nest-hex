@@ -104,8 +104,35 @@ export class PortGenerator extends BaseGenerator {
 			content: indexContent,
 		})
 
+		// 6. Example files (optional based on generateExample and registrationType)
+		if (context.generateExample && context.registrationType) {
+			const exampleFileName =
+				context.registrationType === 'sync'
+					? `${fileName}.sync.example.ts`
+					: `${fileName}.async.example.ts`
+
+			const exampleTemplate =
+				context.registrationType === 'sync'
+					? 'port-sync.example.hbs'
+					: 'port-async.example.hbs'
+
+			let exampleContent = await this.renderTemplate(
+				join(this.getTemplateDir('examples'), exampleTemplate),
+				context,
+			)
+			exampleContent = this.applyStyleConfig(exampleContent, context)
+			files.push({
+				path: join(portDir, exampleFileName),
+				content: exampleContent,
+			})
+		}
+
 		// Generate all files
-		const generatedFiles = await this.generateFiles(files, options.dryRun)
+		const generatedFiles = await this.generateFiles(
+			files,
+			options.dryRun,
+			options.force,
+		)
 
 		return {
 			success: true,

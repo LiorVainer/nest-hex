@@ -57,16 +57,18 @@ export abstract class BaseGenerator {
 	 * @param filePath - Destination file path
 	 * @param content - File content
 	 * @param dryRun - If true, don't actually write the file
+	 * @param force - If true, overwrite existing files
 	 * @returns WriteResult indicating success and conflict status
 	 */
 	protected async writeFile(
 		filePath: string,
 		content: string,
 		dryRun = false,
+		force = false,
 	): Promise<import('../utils/file-writer').WriteResult> {
 		return writeFile(filePath, content, {
 			dryRun,
-			force: false,
+			force,
 		})
 	}
 
@@ -248,18 +250,25 @@ export abstract class BaseGenerator {
 	 *
 	 * @param files - Array of files to generate
 	 * @param dryRun - If true, don't actually write files
+	 * @param force - If true, overwrite existing files
 	 * @returns Array of successfully generated file paths
 	 * @throws Error if any files fail to write
 	 */
 	protected async generateFiles(
 		files: FileToGenerate[],
 		dryRun = false,
+		force = false,
 	): Promise<string[]> {
 		const generatedFiles: string[] = []
 		const failures: Array<{ path: string; error: string }> = []
 
 		for (const file of files) {
-			const result = await this.writeFile(file.path, file.content, dryRun)
+			const result = await this.writeFile(
+				file.path,
+				file.content,
+				dryRun,
+				force,
+			)
 
 			if (result.success) {
 				generatedFiles.push(file.path)

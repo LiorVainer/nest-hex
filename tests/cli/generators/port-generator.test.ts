@@ -379,5 +379,213 @@ describe('PortGenerator Output Validation', () => {
 			const tokenContent = await tokenFile.text()
 			expect(tokenContent).toContain('OBJECT_STORAGE_PORT')
 		})
+
+		test('handles port name with underscores', async () => {
+			// Arrange
+			const config = configBuilder().build()
+			const generator = new PortGenerator(config)
+
+			// Act
+			await generator.generate({
+				name: 'object_storage',
+				outputPath: join(testDir, 'src/ports'),
+			})
+
+			// Assert: Files normalized to kebab-case
+			const baseDir = join(testDir, 'src/ports/object-storage')
+			const tokenFile = Bun.file(join(baseDir, 'object-storage.token.ts'))
+			expect(await tokenFile.exists()).toBe(true)
+
+			// Token should be SCREAMING_SNAKE_CASE
+			const tokenContent = await tokenFile.text()
+			expect(tokenContent).toContain('OBJECT_STORAGE_PORT')
+		})
+	})
+
+	describe('Port Generation Options', () => {
+		const tempDir = createTempDir()
+		let testDir: string
+
+		beforeEach(async () => {
+			testDir = await tempDir.create()
+		})
+
+		afterEach(async () => {
+			await tempDir.cleanupAll()
+		})
+
+		test('generateExample=true with registrationType=sync generates sync example', async () => {
+			// Arrange
+			const config = configBuilder().build()
+			const generator = new PortGenerator(config)
+
+			// Act
+			await generator.generate({
+				name: 'payment',
+				outputPath: join(testDir, 'src/ports'),
+				generateExample: true,
+				registrationType: 'sync',
+			})
+
+			// Assert: Sync example file exists
+			const exampleFile = join(
+				testDir,
+				'src/ports/payment/payment.sync.example.ts',
+			)
+			const file = Bun.file(exampleFile)
+			expect(await file.exists()).toBe(true)
+
+			const content = await file.text()
+			expect(content).toContain('PaymentModule.register')
+			expect(content).toContain('Sync registration')
+			expect(content).not.toContain('registerAsync')
+			expect(content).not.toContain('import { ConfigModule, ConfigService }')
+		})
+
+		test('generateExample=true with registrationType=async generates async example', async () => {
+			// Arrange
+			const config = configBuilder().build()
+			const generator = new PortGenerator(config)
+
+			// Act
+			await generator.generate({
+				name: 'payment',
+				outputPath: join(testDir, 'src/ports'),
+				generateExample: true,
+				registrationType: 'async',
+			})
+
+			// Assert: Async example file exists
+			const exampleFile = join(
+				testDir,
+				'src/ports/payment/payment.async.example.ts',
+			)
+			const file = Bun.file(exampleFile)
+			expect(await file.exists()).toBe(true)
+
+			const content = await file.text()
+			expect(content).toContain('PaymentModule.register')
+			expect(content).toContain('registerAsync')
+			expect(content).toContain('ConfigService')
+			expect(content).toContain('useFactory')
+		})
+
+		test('generateExample=false does not generate example files', async () => {
+			// Arrange
+			const config = configBuilder().build()
+			const generator = new PortGenerator(config)
+
+			// Act
+			await generator.generate({
+				name: 'payment',
+				outputPath: join(testDir, 'src/ports'),
+				generateExample: false,
+				registrationType: 'sync',
+			})
+
+			// Assert: No example files
+			const syncExample = join(
+				testDir,
+				'src/ports/payment/payment.sync.example.ts',
+			)
+			const asyncExample = join(
+				testDir,
+				'src/ports/payment/payment.async.example.ts',
+			)
+
+			expect(await Bun.file(syncExample).exists()).toBe(false)
+			expect(await Bun.file(asyncExample).exists()).toBe(false)
+		})
+
+		test('dryRun=true simulates without writing files', async () => {
+			// Arrange
+			const config = configBuilder().build()
+			const generator = new PortGenerator(config)
+
+			// Act
+			const result = await generator.generate({
+				name: 'payment',
+				outputPath: join(testDir, 'src/ports'),
+				dryRun: true,
+			})
+
+			// Assert: Returns success with file list
+			expect(result.success).toBe(true)
+			expect(result.files.length).toBeGreaterThan(0)
+
+			// But files should NOT exist on disk
+			const tokenFile = join(testDir, 'src/ports/payment/payment.token.ts')
+			expect(await Bun.file(tokenFile).exists()).toBe(false)
+		})
+	})
+
+	describe('Port File Conflicts', () => {
+		const tempDir = createTempDir()
+		let testDir: string
+
+		beforeEach(async () => {
+			testDir = await tempDir.create()
+		})
+
+		afterEach(async () => {
+			await tempDir.cleanupAll()
+		})
+
+		test('port generation with existing files errors without force', async () => {
+			// Arrange
+			const config = configBuilder().build()
+			const generator = new PortGenerator(config)
+			const outputPath = join(testDir, 'src/ports')
+
+			// First generation
+			await generator.generate({
+				name: 'payment',
+				outputPath,
+			})
+
+			// Act & Assert: Second generation without force should fail
+			await expect(
+				generator.generate({
+					name: 'payment',
+					outputPath,
+					force: false,
+				}),
+			).rejects.toThrow()
+		})
+
+		test('port generation with force=true overwrites existing files', async () => {
+			// Arrange
+			const config = configBuilder().build()
+			const generator = new PortGenerator(config)
+			const outputPath = join(testDir, 'src/ports')
+
+			// First generation
+			await generator.generate({
+				name: 'payment',
+				outputPath,
+			})
+
+			const tokenFile = join(testDir, 'src/ports/payment/payment.token.ts')
+
+			// Modify the file manually
+			await Bun.write(tokenFile, '// MODIFIED CONTENT')
+			const modifiedContent = await Bun.file(tokenFile).text()
+			expect(modifiedContent).toContain('MODIFIED')
+
+			// Act: Second generation WITH force should overwrite
+			const result = await generator.generate({
+				name: 'payment',
+				outputPath,
+				force: true,
+			})
+
+			// Assert: Success
+			expect(result.success).toBe(true)
+
+			// File should be restored to original
+			const restoredContent = await Bun.file(tokenFile).text()
+			expect(restoredContent).not.toContain('MODIFIED')
+			expect(restoredContent).toContain('PAYMENT_PORT')
+		})
 	})
 })
