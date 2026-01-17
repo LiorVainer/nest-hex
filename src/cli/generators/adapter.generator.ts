@@ -106,10 +106,10 @@ export class AdapterGenerator extends BaseGenerator {
 			options.outputPath ||
 			this.resolvePath(this.config.output?.adaptersDir || 'src/adapters')
 
-		// Create adapter directory path
+		// Create adapter directory path using fileName (respects fileCase config)
 		// Always use flat structure: adapters/{adapterName}/
 		// This makes the import path consistent: ../../ports/{portName}
-		const adapterDir = join(outputDir, context.nameKebab)
+		const adapterDir = join(outputDir, context.fileName)
 
 		// Generate file list
 		const files: FileToGenerate[] = []
@@ -120,7 +120,7 @@ export class AdapterGenerator extends BaseGenerator {
 			context,
 		)
 		files.push({
-			path: join(adapterDir, `${context.nameKebab}.adapter.ts`),
+			path: join(adapterDir, `${context.fileName}.adapter.ts`),
 			content: adapterContent,
 		})
 
@@ -130,7 +130,7 @@ export class AdapterGenerator extends BaseGenerator {
 			context,
 		)
 		files.push({
-			path: join(adapterDir, `${context.nameKebab}.service.ts`),
+			path: join(adapterDir, `${context.fileName}.service.ts`),
 			content: serviceContent,
 		})
 
@@ -140,7 +140,7 @@ export class AdapterGenerator extends BaseGenerator {
 			context,
 		)
 		files.push({
-			path: join(adapterDir, `${context.nameKebab}.types.ts`),
+			path: join(adapterDir, `${context.fileName}.types.ts`),
 			content: typesContent,
 		})
 

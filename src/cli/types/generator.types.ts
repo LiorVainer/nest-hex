@@ -27,6 +27,9 @@ export interface GeneratorContext extends Record<string, unknown> {
 	nameSnake: string
 	nameScreamingSnake: string
 
+	// File name (transformed based on fileCase config)
+	fileName: string
+
 	// Configuration
 	portSuffix: string
 	adapterSuffix: string

@@ -22,3 +22,6 @@ nest-hex.config.ts
 src/ports/
 src/adapters/
 .tmp-test/
+
+ports/
+adapters/

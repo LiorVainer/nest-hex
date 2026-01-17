@@ -219,11 +219,14 @@ export abstract class BaseGenerator {
 			styled = styled.replace(
 				/^(export\s+.+?)(\s*)$/gm,
 				(match, code, whitespace) => {
-					// Don't add to comments, empty lines, or lines already ending with semicolon
+					const trimmed = code.trim()
+					// Don't add to comments, empty lines, lines already ending with semicolon,
+					// or lines ending with opening braces (interface/class declarations)
 					if (
-						code.trim().startsWith('//') ||
-						code.trim() === '' ||
-						code.trim().endsWith(';')
+						trimmed.startsWith('//') ||
+						trimmed === '' ||
+						trimmed.endsWith(';') ||
+						trimmed.endsWith('{')
 					) {
 						return match
 					}
