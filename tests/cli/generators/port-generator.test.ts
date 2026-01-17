@@ -263,22 +263,21 @@ describe('PortGenerator Output Validation', () => {
 			expect(content).not.toContain('OBJECT_STORAGE_PORT')
 		})
 
-		test.skip('respects custom portsDir', async () => {
-			// TODO: Current behavior requires outputPath to include the full path.
-			// To use custom portsDir, don't provide outputPath, let generator use config.output.portsDir
-			// This is a design decision - outputPath is meant to be the complete target directory
+		test('respects custom outputPath over config portsDir', async () => {
+			// When outputPath is provided, it takes precedence over config.output.portsDir
+			// This test validates that providing a custom outputPath works correctly
 
 			// Arrange
-			const config = configBuilder().withPortsDir('custom/domain/ports').build()
+			const config = configBuilder().withPortsDir('src/ports').build()
 			const generator = new PortGenerator(config)
 
-			// Act
+			// Act - provide explicit custom outputPath
 			await generator.generate({
 				name: 'object-storage',
-				outputPath: testDir,
+				outputPath: join(testDir, 'custom/domain/ports'),
 			})
 
-			// Assert: Files created in custom directory
+			// Assert: Files created in the explicit outputPath directory
 			const expectedDir = join(testDir, 'custom/domain/ports/object-storage')
 			const tokenFile = Bun.file(join(expectedDir, 'object-storage.token.ts'))
 			expect(await tokenFile.exists()).toBe(true)

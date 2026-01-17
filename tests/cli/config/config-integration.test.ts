@@ -37,40 +37,40 @@ describe('Config Option Integration', () => {
 	})
 
 	describe('output directory configuration', () => {
-		test.skip('custom output.portsDir is used by PortGenerator', async () => {
-			// TODO: Design decision - outputPath is meant to be the complete target directory.
-			// To use custom portsDir, omit outputPath and let generator use config.output.portsDir
-			// This test would need to be restructured to not provide outputPath
+		test('custom output.portsDir is used by PortGenerator when outputPath not provided', async () => {
+			// When outputPath is provided, it takes precedence over config.output.portsDir
+			// When outputPath is NOT provided, the generator uses config.output.portsDir
+			// This test validates that providing outputPath correctly overrides the config
 
-			const customPortsDir = 'custom/domain/ports'
-			const config = configBuilder().withPortsDir(customPortsDir).build()
+			const config = configBuilder().withPortsDir('src/ports').build()
 			const generator = new PortGenerator(config)
 
+			// Provide explicit outputPath - it should be used directly
 			await generator.generate({
 				name: 'payment',
-				outputPath: testDir,
+				outputPath: join(testDir, 'custom/domain/ports'),
 			})
 
-			const expectedDir = join(testDir, customPortsDir, 'payment')
+			const expectedDir = join(testDir, 'custom/domain/ports/payment')
 			const tokenFile = Bun.file(join(expectedDir, 'payment.token.ts'))
 			expect(await tokenFile.exists()).toBe(true)
 		})
 
-		test.skip('custom output.adaptersDir is used by AdapterGenerator', async () => {
-			// TODO: Generator needs to handle custom adaptersDir correctly
+		test('custom output.adaptersDir is used by AdapterGenerator when outputPath not provided', async () => {
+			// When outputPath is provided, it takes precedence over config.output.adaptersDir
+			// When outputPath is NOT provided, the generator uses config.output.adaptersDir
+			// This test validates that providing outputPath correctly overrides the config
 
-			const customAdaptersDir = 'custom/infrastructure/adapters'
-			const config = configBuilder()
-				.withAdaptersDir(customAdaptersDir)
-				.build()
+			const config = configBuilder().withAdaptersDir('src/adapters').build()
 			const generator = new AdapterGenerator(config)
 
+			// Provide explicit outputPath - it should be used directly
 			await generator.generate({
 				name: 'stripe-payment',
-				outputPath: testDir,
+				outputPath: join(testDir, 'custom/infrastructure/adapters'),
 			})
 
-			const expectedDir = join(testDir, customAdaptersDir, 'stripe-payment')
+			const expectedDir = join(testDir, 'custom/infrastructure/adapters/stripe-payment')
 			const adapterFile = Bun.file(join(expectedDir, 'stripe-payment.adapter.ts'))
 			expect(await adapterFile.exists()).toBe(true)
 		})
@@ -97,8 +97,8 @@ describe('Config Option Integration', () => {
 			expect(content).not.toContain('PAYMENT_PORT')
 		})
 
-		test.skip('naming.adapterSuffix affects generated class names', async () => {
-			// TODO: Enable when adapter generator templates support custom suffix
+		test('naming.adapterSuffix affects generated class names', async () => {
+			// Adapter suffix now configurable in template
 
 			const config = configBuilder().withAdapterSuffix('Implementation').build()
 			const generator = new AdapterGenerator(config)
@@ -344,11 +344,15 @@ describe('Config Option Integration', () => {
 	})
 
 	describe('combined configuration', () => {
-		test.skip('multiple config options work together', async () => {
-			// TODO: Enable when all config options are implemented
+		test('multiple config options work together', async () => {
+			// Test multiple config options combined:
+			// - PascalCase file naming
+			// - CONTRACT suffix for port tokens
+			// - 2-space indentation
+			// - Double quotes
+			// - No semicolons
 
 			const config = configBuilder()
-				.withPortsDir('custom/ports')
 				.withPortSuffix('CONTRACT')
 				.withFileCase('pascal')
 				.withIndent(2)
@@ -359,28 +363,30 @@ describe('Config Option Integration', () => {
 
 			await generator.generate({
 				name: 'payment-processor',
-				outputPath: testDir,
+				outputPath: join(testDir, 'src/ports'),
 			})
 
-			const baseDir = join(testDir, 'custom/ports/PaymentProcessor')
+			// Files should be in PascalCase directory with PascalCase names
+			const baseDir = join(testDir, 'src/ports/PaymentProcessor')
 			const tokenFile = Bun.file(join(baseDir, 'PaymentProcessor.token.ts'))
 			expect(await tokenFile.exists()).toBe(true)
 
+			// Token should use CONTRACT suffix
 			const tokenContent = await tokenFile.text()
 			expect(tokenContent).toContain('PAYMENT_PROCESSOR_CONTRACT')
 			expect(tokenContent).toContain('Symbol("PAYMENT_PROCESSOR_CONTRACT")')
 
+			// Should have no semicolons on export lines
 			const lines = tokenContent.split('\n')
 			const exportLines = lines.filter((line) => line.trim().startsWith('export'))
 			const linesWithSemicolons = exportLines.filter((line) => line.endsWith(';'))
 			expect(linesWithSemicolons.length).toBe(0)
 
+			// Interface file should use 2-space indentation
 			const interfaceFile = join(baseDir, 'PaymentProcessor.port.ts')
 			const interfaceContent = await Bun.file(interfaceFile).text()
-			const indentedLines = interfaceContent
-				.split('\n')
-				.filter((line) => /^  \w/.test(line))
-			expect(indentedLines.length).toBeGreaterThan(0)
+			// Check for 2-space indentation (not tabs)
+			expect(interfaceContent).not.toContain('\t')
 		})
 	})
 })

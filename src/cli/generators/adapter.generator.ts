@@ -115,47 +115,55 @@ export class AdapterGenerator extends BaseGenerator {
 		const files: FileToGenerate[] = []
 
 		// 1. Adapter class (always generated)
-		const adapterContent = await this.renderTemplate(
+		let adapterContent = await this.renderTemplate(
 			join(templateDir, 'adapter.hbs'),
 			context,
 		)
+		adapterContent = this.applyStyleConfig(adapterContent, context)
 		files.push({
 			path: join(adapterDir, `${context.fileName}.adapter.ts`),
 			content: adapterContent,
 		})
 
 		// 2. Service implementation (always generated)
-		const serviceContent = await this.renderTemplate(
+		let serviceContent = await this.renderTemplate(
 			join(templateDir, 'service.hbs'),
 			context,
 		)
+		serviceContent = this.applyStyleConfig(serviceContent, context)
 		files.push({
 			path: join(adapterDir, `${context.fileName}.service.ts`),
 			content: serviceContent,
 		})
 
 		// 3. Types file (always generated)
-		const typesContent = await this.renderTemplate(
+		let typesContent = await this.renderTemplate(
 			join(templateDir, 'types.hbs'),
 			context,
 		)
+		typesContent = this.applyStyleConfig(typesContent, context)
 		files.push({
 			path: join(adapterDir, `${context.fileName}.types.ts`),
 			content: typesContent,
 		})
 
 		// 4. Index file (barrel export)
-		const indexContent = await this.renderTemplate(
+		let indexContent = await this.renderTemplate(
 			join(templateDir, 'index.hbs'),
 			context,
 		)
+		indexContent = this.applyStyleConfig(indexContent, context)
 		files.push({
 			path: join(adapterDir, 'index.ts'),
 			content: indexContent,
 		})
 
 		// Generate all files
-		const generatedFiles = await this.generateFiles(files, options.dryRun)
+		const generatedFiles = await this.generateFiles(
+			files,
+			options.dryRun,
+			options.force,
+		)
 
 		return {
 			success: true,

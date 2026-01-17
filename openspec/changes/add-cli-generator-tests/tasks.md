@@ -32,9 +32,9 @@
 
 ### 2.3 Config Option Integration Tests
 - [x] 2.3.1 Test custom output.portsDir is used by PortGenerator (⚠️ Skipped - design decision: outputPath is complete path)
-- [x] 2.3.2 Test custom output.adaptersDir is used by AdapterGenerator (⚠️ Skipped - needs adapter generator implementation)
+- [x] 2.3.2 Test custom output.adaptersDir is used by AdapterGenerator (⚠️ Skipped - design decision: outputPath is complete path)
 - [x] 2.3.3 Test naming.portSuffix affects generated token names ✅
-- [x] 2.3.4 Test naming.adapterSuffix affects generated class names (⚠️ Skipped - needs adapter generator implementation)
+- [x] 2.3.4 Test naming.adapterSuffix affects generated class names ✅
 - [x] 2.3.5 Test naming.fileCase=kebab generates kebab-case files ✅
 - [x] 2.3.6 Test naming.fileCase=camel generates camelCase files ✅
 - [x] 2.3.7 Test naming.fileCase=pascal generates PascalCase files ✅
@@ -84,51 +84,52 @@
 ## 4. AdapterGenerator Tests
 
 ### 4.1 Basic Adapter Generation
-- [ ] 4.1.1 Test generates adapter class file with @Adapter decorator
-- [ ] 4.1.2 Test generates adapter service file implementing port
-- [ ] 4.1.3 Test generates adapter types file with config options
-- [ ] 4.1.4 Test generates index.ts with correct exports
-- [ ] 4.1.5 Test file names match config.naming.fileCase
+- [x] 4.1.1 Test generates adapter class file with @Adapter decorator ✅
+- [x] 4.1.2 Test generates adapter service file implementing port ✅
+- [x] 4.1.3 Test generates adapter types file with config options ✅
+- [x] 4.1.4 Test generates index.ts with correct exports ✅
+- [x] 4.1.5 Test file names match config.naming.fileCase ✅
 
 ### 4.2 Adapter with Port Integration
-- [ ] 4.2.1 Test adapter with portName option imports correct port
-- [ ] 4.2.2 Test adapter with portPath option uses custom import path
-- [ ] 4.2.3 Test adapter with portTokenName option uses custom token
-- [ ] 4.2.4 Test adapter without port options generates basic structure
-- [ ] 4.2.5 Test import path calculation is correct and relative
+- [x] 4.2.1 Test adapter with portName option imports correct port ✅
+- [x] 4.2.2 Test adapter with portPath option uses custom import path ✅
+- [x] 4.2.3 Test adapter with portTokenName option uses custom token ✅
+- [x] 4.2.4 Test adapter without port options generates basic structure ✅
+- [x] 4.2.5 Test import path calculation is correct and relative ✅
 
 ### 4.3 Adapter Output Validation
-- [ ] 4.3.1 Test generated adapter extends AdapterBase
-- [ ] 4.3.2 Test @Adapter decorator includes portToken reference
-- [ ] 4.3.3 Test adapter service implements port interface (if port provided)
-- [ ] 4.3.4 Test types file includes config options interface
-- [ ] 4.3.5 Test generated code compiles with tsc --noEmit
-- [ ] 4.3.6 Test adapter class name uses Adapter suffix (from config)
+- [x] 4.3.1 Test generated adapter extends AdapterBase ✅
+- [x] 4.3.2 Test @Adapter decorator includes portToken reference ✅
+- [x] 4.3.3 Test adapter service implements port interface (if port provided) ✅
+- [x] 4.3.4 Test types file includes config options interface ✅
+- [x] 4.3.5 Test generated code compiles with tsc --noEmit ✅
+- [x] 4.3.6 Test adapter class name uses Adapter suffix (from config) ✅
 
 ### 4.4 Adapter Edge Cases
-- [ ] 4.4.1 Test adapter generation in non-existent directory (should create)
-- [ ] 4.4.2 Test adapter generation with existing files (should error without --force)
-- [ ] 4.4.3 Test adapter generation with --force overwrites existing files
-- [ ] 4.4.4 Test adapter name with hyphens (e.g., s3-storage)
-- [ ] 4.4.5 Test adapter with technology option includes description
+- [x] 4.4.1 Test adapter generation in non-existent directory (should create) ✅
+- [x] 4.4.2 Test adapter generation with existing files (should error without --force) ✅
+- [x] 4.4.3 Test adapter generation with --force overwrites existing files ✅
+- [x] 4.4.4 Test adapter name with hyphens (e.g., s3-storage) ✅
+- [x] 4.4.5 Test adapter with technology option includes description ✅
 
 ## 5. ServiceGenerator Tests
 
 ### 5.1 Basic Service Generation
-- [ ] 5.1.1 Test generates injectable service file
-- [ ] 5.1.2 Test service includes @Injectable decorator
-- [ ] 5.1.3 Test file name matches config.naming.fileCase
+- [x] 5.1.1 Test generates injectable service file ✅
+- [x] 5.1.2 Test service includes @Injectable decorator ✅
+- [x] 5.1.3 Test file name matches config.naming.fileCase ✅
 
 ### 5.2 Service with Port Injection
-- [ ] 5.2.1 Test service with portName includes @InjectPort
-- [ ] 5.2.2 Test service imports correct port token
-- [ ] 5.2.3 Test service constructor includes port injection
-- [ ] 5.2.4 Test service without portName generates basic structure
+- [x] 5.2.1 Test service with portName includes @InjectPort ✅
+- [x] 5.2.2 Test service imports correct port token ✅
+- [x] 5.2.3 Test service constructor includes port injection ✅
+- [x] 5.2.4 Test service without portName generates basic structure ✅
+- [x] 5.2.5 Test service with custom portPath uses specified import path ✅
 
 ### 5.3 Service Output Validation
-- [ ] 5.3.1 Test generated code compiles with tsc --noEmit
-- [ ] 5.3.2 Test import paths are correct and relative
-- [ ] 5.3.3 Test service class name follows PascalCase convention
+- [x] 5.3.1 Test generated code compiles with tsc --noEmit ✅
+- [x] 5.3.2 Test import paths are correct and relative ✅
+- [x] 5.3.3 Test service class name follows PascalCase convention ✅
 
 ## 6. Utility Function Tests
 
